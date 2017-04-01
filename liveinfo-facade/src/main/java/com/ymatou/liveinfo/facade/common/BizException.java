@@ -1,4 +1,4 @@
-package com.ymatou.liveinfo.facade;
+package com.ymatou.liveinfo.facade.common;
 
 
 /**
@@ -9,27 +9,27 @@ package com.ymatou.liveinfo.facade;
  */
 public class BizException extends RuntimeException {
     private static final long serialVersionUID = 1857440708804128584L;
-    private ErrorCode errorCode;
+    private ResponseCode errorCode;
 
-    public BizException(ErrorCode errorCode, String msg) {
+    public BizException(ResponseCode errorCode, String msg) {
 
         this(errorCode, msg, null);
     }
 
-    public BizException(ErrorCode errorCode) {
+    public BizException(ResponseCode errorCode) {
 
         this(errorCode, "", null);
     }
 
     public BizException(String msg) {
-        this(ErrorCode.FAIL, msg);
+        this(ResponseCode.FAIL, msg);
     }
 
     public BizException(String msg, Throwable cause) {
-        this(ErrorCode.FAIL, msg, cause);
+        this(ResponseCode.FAIL, msg, cause);
     }
 
-    public BizException(ErrorCode errorCode, String msg, Throwable cause) {
+    public BizException(ResponseCode errorCode, String msg, Throwable cause) {
 
         super(msg, cause);
         if (errorCode == null) {
@@ -38,7 +38,7 @@ public class BizException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public ErrorCode getErrorCode() {
+    public ResponseCode getErrorCode() {
         return errorCode;
     }
 }

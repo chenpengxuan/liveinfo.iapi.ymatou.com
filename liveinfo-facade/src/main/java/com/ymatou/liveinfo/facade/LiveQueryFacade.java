@@ -1,7 +1,8 @@
 package com.ymatou.liveinfo.facade;
 
-import com.ymatou.liveinfo.facade.model.GetSellerActivityReq;
-import com.ymatou.liveinfo.facade.model.GetSellerActivityResp;
+import com.ymatou.liveinfo.domain.model.GetActivityInfoReq;
+import com.ymatou.liveinfo.domain.model.GetSellerActivityReq;
+import com.ymatou.liveinfo.domain.model.GetSellerActivityResp;
 
 /**
  * 直播查询API

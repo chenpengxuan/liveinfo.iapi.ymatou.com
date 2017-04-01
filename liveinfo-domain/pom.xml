@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>liveinfo-facade-impl</artifactId>
+    <artifactId>liveinfo-domain</artifactId>
     <packaging>jar</packaging>
 
-    <name>liveinfo-facade-impl</name>
+    <name>liveinfo-domain</name>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -20,11 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.ymatou.liveinfo</groupId>
-            <artifactId>liveinfo-facade</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.ymatou.liveinfo</groupId>
-            <artifactId>liveinfo-domain</artifactId>
+            <artifactId>liveinfo-infrastructure</artifactId>
         </dependency>
     </dependencies>
 </project>

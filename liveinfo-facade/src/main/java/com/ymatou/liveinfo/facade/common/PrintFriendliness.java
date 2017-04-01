@@ -1,4 +1,4 @@
-package com.ymatou.liveinfo.facade;
+package com.ymatou.liveinfo.facade.common;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;

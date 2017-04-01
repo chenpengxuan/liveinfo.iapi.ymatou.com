@@ -1,6 +1,6 @@
-package com.ymatou.liveinfo.facade.model;
+package com.ymatou.liveinfo.domain.model;
 
-import com.ymatou.liveinfo.facade.BaseResponse;
+import com.ymatou.liveinfo.facade.common.BaseResponse;
 
 /**
  * Created by wangxudong on 2017/4/1.

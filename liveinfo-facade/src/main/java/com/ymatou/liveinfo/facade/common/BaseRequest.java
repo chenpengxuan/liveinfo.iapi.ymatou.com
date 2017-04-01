@@ -1,4 +1,4 @@
-package com.ymatou.liveinfo.facade;
+package com.ymatou.liveinfo.facade.common;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

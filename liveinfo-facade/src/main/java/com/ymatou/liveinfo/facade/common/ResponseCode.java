@@ -1,16 +1,18 @@
-package com.ymatou.liveinfo.facade;
+package com.ymatou.liveinfo.facade.common;
 
 
 /**
  * @author wangxudong 2016年12月22日 下午3:39:08
  *
  */
-public enum ErrorCode {
+public enum ResponseCode {
+
+    SUCCESS(200, "操作成功"),
 
     /*
      * 参数错误 4000
      */
-    ILLEGAL_ARGUMENT(4000, "错误的请求参数"),
+    ILLEGAL_ARGUMENT(400, "错误的请求参数"),
 
     /*
      * 通用错误 5000
@@ -26,7 +28,7 @@ public enum ErrorCode {
 
     private String message;
 
-    private ErrorCode(int code, String message) {
+    private ResponseCode(int code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -45,8 +47,8 @@ public enum ErrorCode {
      * @param code
      * @return
      */
-    public static ErrorCode getByCode(int code) {
-        for (ErrorCode errorCode : ErrorCode.values()) {
+    public static ResponseCode getByCode(int code) {
+        for (ResponseCode errorCode : ResponseCode.values()) {
             if (errorCode.getCode() == code) {
                 return errorCode;
             }
