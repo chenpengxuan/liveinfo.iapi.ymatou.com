@@ -9,12 +9,15 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * Created by wangxudong on 2017/4/5.
  */
 @Component
-public class ActivityCacheLoader extends CacheLoader<Integer, ActivityInfo> {
+public class ActivityCacheLoader extends CacheLoader<Integer, Optional<ActivityInfo>> {
 
     @Resource
     private LiveRepository liveRepository;
@@ -30,8 +33,14 @@ public class ActivityCacheLoader extends CacheLoader<Integer, ActivityInfo> {
      *                              the thread's interrupt status is set
      */
     @Override
-    public ActivityInfo load(Integer key) throws Exception {
-        Live live = liveRepository.getSellerCurrentLive(key);
+    public Optional<ActivityInfo> load(Integer key) throws Exception {
+        ActivityInfo activityInfo = getByRepository(key);
+
+        return  Optional.ofNullable(activityInfo);
+    }
+
+    public ActivityInfo getByRepository(Integer sellerId){
+        Live live = liveRepository.getSellerCurrentLive(sellerId);
         if(live == null){
             return  null;
         }
