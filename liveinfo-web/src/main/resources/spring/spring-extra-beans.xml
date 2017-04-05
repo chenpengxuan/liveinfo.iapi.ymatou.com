@@ -75,7 +75,7 @@
 	<aop:config>
 		<aop:advisor advice-ref="performanceMonitorAdvice"
 			pointcut="execution(* com.ymatou.liveinfo.facade.*Facade.*(..))
-						|| execution(* com.ymatou.liveinfo.integration.client.*Client.*(..))))
+						|| execution(* com.ymatou.liveinfo.domain.repository.*Repository.*(..))))
 						" />
 	</aop:config>
 

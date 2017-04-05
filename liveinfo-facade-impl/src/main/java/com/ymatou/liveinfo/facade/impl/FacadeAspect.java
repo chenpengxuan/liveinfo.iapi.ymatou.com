@@ -1,4 +1,4 @@
-package com.ymatou.liveinfo.domain.model;
+package com.ymatou.liveinfo.facade.impl;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.ymatou.liveinfo.facade.common.BaseRequest;

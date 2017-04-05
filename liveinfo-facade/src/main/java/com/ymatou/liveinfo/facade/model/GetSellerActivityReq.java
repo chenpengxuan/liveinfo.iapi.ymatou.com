@@ -1,4 +1,4 @@
-package com.ymatou.liveinfo.domain.model;
+package com.ymatou.liveinfo.facade.model;
 
 import com.ymatou.liveinfo.facade.common.BaseRequest;
 

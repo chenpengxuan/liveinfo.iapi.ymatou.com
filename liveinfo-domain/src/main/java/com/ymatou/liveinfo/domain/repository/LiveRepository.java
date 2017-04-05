@@ -2,7 +2,6 @@ package com.ymatou.liveinfo.domain.repository;
 
 import com.mongodb.MongoClient;
 import com.ymatou.liveinfo.domain.model.Live;
-import com.ymatou.liveinfo.domain.service.LiveService;
 import com.ymatou.liveinfo.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
@@ -20,6 +19,9 @@ public class LiveRepository extends MongoRepository {
     private MongoClient mongoClient;
 
     private final String dbName = "YmtProducts";
+
+    private final String[] liveFields = "lid,sid,confirm,sid,flag,title,vcover,vurl,name,pic,add,country,end,addr,start"
+            .split(",");
 
     /**
      * 获取到MongoClient
@@ -45,6 +47,6 @@ public class LiveRepository extends MongoRepository {
             query.criteria("action").equal(1)
         );
 
-        return query.limit(1).get();
+        return query.retrievedFields(true, liveFields).disableValidation().limit(1).get();
     }
 }

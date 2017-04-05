@@ -3,7 +3,7 @@
  *
  * All rights reserved.
  */
-package com.ymatou.liveinfo.domain.model.web;
+package com.ymatou.liveinfo.web;
 
 import com.alibaba.dubbo.remoting.http.servlet.BootstrapListener;
 import com.alibaba.dubbo.remoting.http.servlet.DispatcherServlet;

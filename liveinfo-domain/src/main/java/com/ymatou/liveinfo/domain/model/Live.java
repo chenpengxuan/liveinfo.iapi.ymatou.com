@@ -1,98 +1,100 @@
 package com.ymatou.liveinfo.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ymatou.liveinfo.facade.common.PrintFriendliness;
+import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
 
 /**
- * 直播信息，对应的数据库实体为Live
- * Created by wangxudong on 2017/4/1.
+ * 直播信息
+ *
  */
-public class ActivityInfo extends PrintFriendliness {
-
+@Entity(value = "Lives", noClassnameStored = true)
+public class Live extends PrintFriendliness
+{
     /**
      * 直播Id
      */
-    @JsonProperty("ActivityId")
+    @Property("lid")
     private int activityId;
 
     /**
      * 标题
      */
-    @JsonProperty("Title")
+    @Property("title")
     private String title;
 
     /**
      * 视频封面图片
      */
-    @JsonProperty("VideoCover")
+    @Property("vcover")
     private String videoCover;
 
     /**
      * 视频URL
      */
-    @JsonProperty("VideoUrl")
+    @Property("vurl")
     private String videoUrl;
 
     /**
      * 直播可用状态：1 - 可用，0 - 不可用，-1 - 已删除
      */
-    @JsonProperty("Action")
+    @Property("action")
     private int action;
 
     /**
      * 直播内容
      */
-    @JsonProperty("ActivityContent")
+    @Property("content")
     private String activityContent;
 
     /**
      * 扫货地
      */
-    @JsonProperty("ActivityName")
+    @Property("name")
     private String activityName;
 
     /**
      * 直播图片
      */
-    @JsonProperty("ActivityPicture")
+    @Property("pic")
     private String activityPicture;
 
     /**
      * 添加时间
      */
-    @JsonProperty("AddTime")
+    @Property("add")
     private Date addTime;
 
     /**
      * 国家
      */
-    @JsonProperty("Country")
+    @Property("country")
     private String country;
 
     /**
      * 结束时间
      */
-    @JsonProperty("EndTime")
+    @Property("end")
     private Date endTime;
 
     /**
      * 买手UserId
      */
-    @JsonProperty("SellerId")
+    @Property("sid")
     private int sellerId;
 
     /**
      * 商家地址
      */
-    @JsonProperty("ShopAddress")
+    @Property("addr")
     private String shopAddress;
 
     /**
      * 开始时间
      */
-    @JsonProperty("StartTime")
+    @Property("start")
     private Date startTime;
 
     public int getActivityId() {

@@ -3,7 +3,7 @@
  *
  * All rights reserved.
  */
-package com.ymatou.liveinfo.domain.model.web;
+package com.ymatou.liveinfo.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

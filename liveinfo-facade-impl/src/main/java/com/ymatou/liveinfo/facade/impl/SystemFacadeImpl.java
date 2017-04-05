@@ -1,4 +1,4 @@
-package com.ymatou.liveinfo.domain.model;
+package com.ymatou.liveinfo.facade.impl;
 
 import com.ymatou.liveinfo.facade.SystemFacade;
 import com.ymatou.liveinfo.infrastructure.util.NetUtil;
