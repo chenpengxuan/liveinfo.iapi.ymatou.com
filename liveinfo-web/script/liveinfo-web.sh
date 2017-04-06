@@ -4,7 +4,7 @@ source "/etc/profile"
 GCLOGPATH="logs/gc.log"
 DISCONF_ENV=$1
 APP_NAME="liveinfo.iapi.ymatou.com"
-MAIN_CLASS="LiveInfoApplication"
+MAIN_CLASS="com.ymatou.liveinfo.web.LiveInfoApplication"
 CLASS_PATH="lib/*:conf"
 JAVA_OPTS=" -server \
 			-Ddisconf.env=${DISCONF_ENV}

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MAIN_CLASS="LiveInfoApplication"
+MAIN_CLASS="com.ymatou.liveinfo.web.LiveInfoApplication"
 
 ps aux | grep ${MAIN_CLASS} | grep -v grep | awk '{print $2}' | xargs kill -9 > /dev/null 2>&1
 ps aux | grep ${MAIN_CLASS} | grep -v grep > /dev/null 2>&1

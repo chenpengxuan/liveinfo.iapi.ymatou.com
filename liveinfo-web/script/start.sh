@@ -3,7 +3,7 @@
 source "/etc/profile"
 GCLOGPATH="logs/gc.log"
 APP_NAME="liveinfo.iapi.ymatou.com"
-MAIN_CLASS="LiveInfoApplication"
+MAIN_CLASS="com.ymatou.liveinfo.web.LiveInfoApplication"
 CLASS_PATH="lib/*:conf"
 JAVA_OPTS=" -server \
             -Xms4096m -Xmx4096m \
