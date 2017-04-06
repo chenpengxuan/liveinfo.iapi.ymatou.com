@@ -2,7 +2,10 @@ package com.ymatou.liveinfo.facade.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ymatou.liveinfo.facade.common.PrintFriendliness;
+import com.ymatou.liveinfo.facade.enums.ActivityStateEnum;
+import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -94,6 +97,70 @@ public class ActivityInfo extends PrintFriendliness {
      */
     @JsonProperty("StartTime")
     private Date startTime;
+
+    /**
+     * App确认状态
+     */
+    @JsonProperty("AppConfirmed")
+    private Boolean appConfirmed;
+
+    /**
+     * 直播信息
+     * @return
+     */
+    @JsonProperty("ActivityInfo")
+    public String getActivityInfo(){
+        return activityContent;
+    }
+
+    /**
+     * 计算直播状态枚举
+     * @return
+     */
+    private ActivityStateEnum calcActivityState(){
+        if(LiveActionEnum.Available.getCode() == action){
+            Calendar now = Calendar.getInstance();
+            if(Boolean.TRUE.equals(appConfirmed)){
+                Date nowDate = now.getTime();
+                if(nowDate.before(startTime) && endTime.after(startTime)){
+                    return ActivityStateEnum.NotStart;
+                }else  if(nowDate.before(endTime) && nowDate.after(startTime)){
+                    return ActivityStateEnum.InProcess;
+                }else{
+                    return ActivityStateEnum.End;
+                }
+            }else{
+                now.add(Calendar.HOUR, 1);
+                if(now.getTime().before(this.endTime)){
+                    return  ActivityStateEnum.NotEffected;
+                }
+                else{
+                    return ActivityStateEnum.End;
+                }
+            }
+        }else{
+            return ActivityStateEnum.End;
+        }
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    @JsonProperty("ActivityStatusText")
+    public String getActivityStatusText(){
+        return calcActivityState().getMessage();
+    }
+
+    /**
+     *
+     * @return
+     */
+    @JsonProperty("ActivityState")
+    public int getActivityState(){
+        return calcActivityState().getCode();
+    }
 
     public int getActivityId() {
         return activityId;
@@ -205,5 +272,13 @@ public class ActivityInfo extends PrintFriendliness {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
+    }
+
+    public Boolean getAppConfirmed() {
+        return appConfirmed;
+    }
+
+    public void setAppConfirmed(Boolean appConfirmed) {
+        this.appConfirmed = appConfirmed;
     }
 }

@@ -1,7 +1,9 @@
 package com.ymatou.liveinfo.domain.model;
 
 import com.ymatou.liveinfo.facade.common.PrintFriendliness;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
@@ -13,6 +15,12 @@ import java.util.Date;
 @Entity(value = "Lives", noClassnameStored = true)
 public class Live extends PrintFriendliness
 {
+    /**
+     * 主键
+     */
+    @Id
+    private ObjectId id;
+
     /**
      * 直播Id
      */
@@ -86,6 +94,18 @@ public class Live extends PrintFriendliness
     private int sellerId;
 
     /**
+     * App确认
+     */
+    @Property("confirm")
+    private Boolean appConfirmed;
+
+    /**
+     *
+     */
+    @Property("flag")
+    private String flag;
+
+    /**
      * 商家地址
      */
     @Property("addr")
@@ -96,6 +116,20 @@ public class Live extends PrintFriendliness
      */
     @Property("start")
     private Date startTime;
+
+    /**
+     * 经纬度
+     */
+    @Property("latlng")
+    private String latLng;
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
 
     public int getActivityId() {
         return activityId;
@@ -193,6 +227,22 @@ public class Live extends PrintFriendliness
         this.sellerId = sellerId;
     }
 
+    public Boolean getAppConfirmed() {
+        return appConfirmed;
+    }
+
+    public void setAppConfirmed(Boolean appConfirmed) {
+        this.appConfirmed = appConfirmed;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
     public String getShopAddress() {
         return shopAddress;
     }
@@ -207,5 +257,13 @@ public class Live extends PrintFriendliness
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
+    }
+
+    public String getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(String latLng) {
+        this.latLng = latLng;
     }
 }

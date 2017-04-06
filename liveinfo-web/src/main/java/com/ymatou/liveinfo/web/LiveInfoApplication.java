@@ -12,7 +12,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication(exclude = MongoAutoConfiguration.class)
-@ComponentScan("com.ymatou.liveinfo")
 @ImportResource("classpath:spring/spring-extra-beans.xml")
 public class LiveInfoApplication {
 

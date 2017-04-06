@@ -16,6 +16,7 @@
         <module>liveinfo-web</module>
         <module>liveinfo-infrastructure</module>
         <module>liveinfo-domain</module>
+        <module>liveinfo-test</module>
     </modules>
 
 	<properties>

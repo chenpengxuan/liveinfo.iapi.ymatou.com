@@ -11,8 +11,14 @@ public interface SystemFacade {
     public String version();
 
     /**
-     *  点火接口
+     * 点火接口
      * @return
      */
     public String warmup();
+
+    /**
+     * 缓存统计
+     * @return
+     */
+    public String cacheStats();
 }

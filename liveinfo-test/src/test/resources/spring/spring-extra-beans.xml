@@ -92,11 +92,4 @@
 	<dubbo:protocol name="rest" server="servlet" port="${rest.port}"
 		extension="com.ymatou.liveinfo.infrastructure.serialize.JacksonConfig" />
 
-	<!-- 服务注册 -->
-	<dubbo:service ref="systemFacade" protocol="rest"
-				   interface="com.ymatou.liveinfo.facade.SystemFacade" />
-	<dubbo:service ref="liveQueryFacade" protocol="rest,dubbo"
-				   interface="com.ymatou.liveinfo.facade.LiveQueryFacade" />
-		
-
 </beans>

@@ -20,7 +20,7 @@ public class LiveRepository extends MongoRepository {
 
     private final String dbName = "YmtProducts";
 
-    private final String[] liveFields = "lid,sid,confirm,sid,flag,title,vcover,vurl,name,pic,add,country,end,addr,start"
+    private final String[] liveFields = "lid,sid,confirm,sid,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action"
             .split(",");
 
     /**
@@ -48,5 +48,28 @@ public class LiveRepository extends MongoRepository {
         );
 
         return query.retrievedFields(true, liveFields).disableValidation().limit(1).get();
+    }
+
+    /**
+     * 插入直播数据
+     * @param live
+     */
+    public void insertLive(Live live){
+        insertEntiy(dbName, live);
+    }
+
+    /**
+     * 获取到最大的直播号
+     * @return
+     */
+    public int getMaxLiveId(){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        Live live = query.retrievedFields(true, "lid").order("-lid").disableValidation().limit(1).get();
+        if(live == null){
+            return 0;
+        }else{
+            return live.getActivityId();
+        }
     }
 }
