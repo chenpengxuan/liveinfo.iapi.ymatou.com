@@ -11,6 +11,9 @@ import org.junit.Test;
 
 import javax.annotation.Resource;
 
+import java.util.Calendar;
+
+import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -29,7 +32,7 @@ public class GetSellerActivityTest extends BaseTest {
 
         System.out.println("LiveId:" + live.getActivityId());
 
-        Live sellerCurrentLive = liveRepository.getSellerCurrentLive(live.getSellerId());
+        Live sellerCurrentLive = liveRepository.getLiveById(live.getActivityId());
         assertNotNull(sellerCurrentLive);
         assertEquals(live.getActivityId(), sellerCurrentLive.getActivityId());
 
@@ -42,6 +45,28 @@ public class GetSellerActivityTest extends BaseTest {
         assertActivityInfo(live, activityInfo);
         assertEquals(ActivityStateEnum.InProcess.getCode(), activityInfo.getActivityState());
         assertEquals(ActivityStateEnum.InProcess.getMessage(), activityInfo.getActivityStatusText());
+    }
+
+    @Test
+    public void testGetSellerActivityWhenAcitvityStateNotStart() {
+        Live live = buildLiveBaseInfo();
+        live.setStartTime(getDateFormNow(Calendar.HOUR, 2));
+        live.setEndTime(getDateFormNow(Calendar.HOUR, 3));
+        liveRepository.insertLive(live);
+
+        System.out.println("LiveId:" + live.getActivityId());
+
+        Live sellerCurrentLive = liveRepository.getLiveById(live.getActivityId());
+        assertNotNull(sellerCurrentLive);
+        assertEquals(live.getActivityId(), sellerCurrentLive.getActivityId());
+
+        GetSellerActivityReq req = new GetSellerActivityReq();
+        req.setSellerId(live.getSellerId());
+        GetSellerActivityResp resp = liveQueryFacade.getSellerActivity(req);
+        assertEquals(200, resp.getCode());
+
+        ActivityInfo activityInfo = (ActivityInfo)resp.getData();
+        assertNull(activityInfo); // 未进行的直播不会显示
     }
 
 }

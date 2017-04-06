@@ -9,20 +9,11 @@ public enum ResponseCode {
 
     SUCCESS(200, "操作成功"),
 
-    /*
-     * 参数错误 4000
-     */
     ILLEGAL_ARGUMENT(400, "错误的请求参数"),
 
-    /*
-     * 通用错误 5000
-     */
-    FAIL(5000, "请求处理失败"),
+    FAIL(201, "请求处理失败"),
 
-    /*
-     * 系统错误 9999
-     */
-    UNKNOWN(9999, "未知错误，系统异常");
+    UNKNOWN(500, "未知错误，系统异常");
 
     private int code;
 

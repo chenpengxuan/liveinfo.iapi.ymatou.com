@@ -31,7 +31,7 @@ public class JacksonConfig implements ContextResolver<ObjectMapper> {
 
         // 解析.NET客戶端传入的时间格式
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         objectMapper.setDateFormat(dateFormat);
     }

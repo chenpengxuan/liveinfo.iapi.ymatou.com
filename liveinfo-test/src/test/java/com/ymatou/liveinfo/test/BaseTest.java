@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -88,5 +89,18 @@ public class BaseTest {
         assertEquals(live.getStartTime(), activityInfo.getStartTime());
         assertEquals(live.getActivityContent(), activityInfo.getActivityContent());
         assertEquals(live.getActivityContent(), activityInfo.getActivityInfo());
+    }
+
+    /**
+     * 获取基于当前时间偏差的日期
+     *
+     * @param diffField
+     * @param diffValue
+     * @return
+     */
+    protected Date getDateFormNow(int diffField, int diffValue){
+        Calendar now = Calendar.getInstance();
+        now.add(diffField, diffValue);
+        return now.getTime();
     }
 }

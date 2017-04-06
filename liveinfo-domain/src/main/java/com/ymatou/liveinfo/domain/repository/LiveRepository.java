@@ -2,12 +2,15 @@ package com.ymatou.liveinfo.domain.repository;
 
 import com.mongodb.MongoClient;
 import com.ymatou.liveinfo.domain.model.Live;
+import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
 import com.ymatou.liveinfo.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by wangxudong on 2017/4/1.
@@ -34,18 +37,34 @@ public class LiveRepository extends MongoRepository {
     }
 
     /**
-     * 获取买手直播中的商品
+     * 获取买手进行中的直播信息
+     *
      * @param sellerId
      * @return
      */
     public Live getSellerCurrentLive(int sellerId){
         Datastore datastore = getDatastore(dbName);
         Query<Live> query = datastore.find(Live.class);
-
+        Date now = Calendar.getInstance().getTime();
         query.and(
-            query.criteria("sid").equal(sellerId),
-            query.criteria("action").equal(1)
+                query.criteria("sid").equal(sellerId),
+                query.criteria("start").lessThanOrEq(now),
+                query.criteria("end").greaterThanOrEq(now),
+                query.criteria("confirm").equal(true),
+                query.criteria("action").equal(LiveActionEnum.Available.getCode())
         );
+        return query.retrievedFields(true, liveFields).disableValidation().order("-lid").limit(1).get();
+    }
+
+    /**
+     * 根据直播Id查询直播信息
+     * @param liveId
+     * @return
+     */
+    public Live getLiveById(int liveId){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        query.field("lid").equal(liveId);
 
         return query.retrievedFields(true, liveFields).disableValidation().limit(1).get();
     }
