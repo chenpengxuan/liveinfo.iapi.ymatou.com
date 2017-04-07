@@ -41,15 +41,11 @@ public class LiveService {
      * @return
      */
     public ActivityInfo getSellerCurrentActivity(int sellerId){
-        if(bizConfig.getCacheLiveExpireTime() < 1){ // 关闭缓存
+        if(activityCacheLoader.disableCache()){ // 禁用缓存
             return activityCacheLoader.getByRepository(sellerId);
         }
 
-        LoadingCache<Integer, Optional<ActivityInfo>> activityCache = cacheFactory.getCache(
-                 "ActivityCacheBySellerId"
-                , bizConfig.getCacheLiveMaxsize()
-                , bizConfig.getCacheLiveExpireTime()
-                , activityCacheLoader );
+        LoadingCache<Integer, Optional<ActivityInfo>> activityCache = cacheFactory.getCache( activityCacheLoader );
         try {
             Optional<ActivityInfo> cacheResult = activityCache.get(sellerId);
             if(cacheResult.isPresent()){
@@ -58,7 +54,7 @@ public class LiveService {
                 return null;
             }
         } catch (ExecutionException e) {
-            throw new BizException("get active info from cache faild,with sellerId:" + sellerId, e);
+            throw new BizException("get activeinfo from cache faild,with sellerId:" + sellerId, e);
         }
     }
 }
