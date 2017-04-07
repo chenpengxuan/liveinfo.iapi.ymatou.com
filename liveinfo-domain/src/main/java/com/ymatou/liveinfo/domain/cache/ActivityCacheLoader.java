@@ -1,6 +1,7 @@
 package com.ymatou.liveinfo.domain.cache;
 
 import com.google.common.cache.CacheLoader;
+import com.ymatou.liveinfo.domain.config.BizConfig;
 import com.ymatou.liveinfo.domain.model.Live;
 import com.ymatou.liveinfo.facade.common.BizException;
 import com.ymatou.liveinfo.facade.model.ActivityInfo;
@@ -17,10 +18,51 @@ import static java.util.Optional.ofNullable;
  * Created by wangxudong on 2017/4/5.
  */
 @Component
-public class ActivityCacheLoader extends CacheLoader<Integer, Optional<ActivityInfo>> {
+public class ActivityCacheLoader extends CacheLoader<Integer, Optional<ActivityInfo>> implements  CacheInfo {
 
     @Resource
     private LiveRepository liveRepository;
+
+    @Resource
+    private BizConfig bizConfig;
+
+    /**
+     * 获取到缓存名称
+     *
+     * @return
+     */
+    @Override
+    public String getCacheName() {
+        return "ActivityCacheBySellerId";
+    }
+
+    /**
+     * 获取到缓存最大数量
+     *
+     * @return
+     */
+    @Override
+    public int getMaximumSize() {
+        return bizConfig.getCacheLiveMaxsize();
+    }
+
+    /**
+     * 获取到缓存过期时间
+     *
+     * @return
+     */
+    @Override
+    public int getExpireTime() {
+        return bizConfig.getCacheLiveExpireTime();
+    }
+
+    /**
+     * 判断是否禁用缓存
+     * @return
+     */
+    public boolean disableCache(){
+        return bizConfig.getCacheLiveExpireTime() < 1;
+    }
 
     /**
      * Computes or retrieves the value corresponding to {@code key}.

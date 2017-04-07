@@ -75,6 +75,22 @@ public class CacheFactory {
     }
 
     /**
+     * 获取到到缓存
+     *
+     * @param cacheLoader must implements CacheInfo
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public <K, V> LoadingCache<K , V> getCache(CacheLoader<K , V> cacheLoader){
+        CacheInfo cacheInfo = (CacheInfo) cacheLoader;
+        if(cacheInfo == null){
+            throw new BizException("cacheLoader must implements CacheInfo");
+        }
+        return getCache(cacheInfo.getCacheName(), cacheInfo.getMaximumSize(), cacheInfo.getExpireTime(), cacheLoader);
+    }
+
+    /**
      * 移除无效的缓存
      * @param cacheName
      * @param curCacheKey
