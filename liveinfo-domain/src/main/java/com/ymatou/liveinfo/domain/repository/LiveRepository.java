@@ -5,6 +5,7 @@ import com.ymatou.liveinfo.domain.model.Live;
 import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
 import com.ymatou.liveinfo.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Component;
 
@@ -91,4 +92,61 @@ public class LiveRepository extends MongoRepository {
             return live.getActivityId();
         }
     }
+
+    public Live getLive(int liveId){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        return query.field("lid").equal(liveId).field("action").equal(1)
+                .order("-lid")
+                .retrievedFields(true, this.liveFields)
+                .disableValidation()
+                .get(new FindOptions().limit(1));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
