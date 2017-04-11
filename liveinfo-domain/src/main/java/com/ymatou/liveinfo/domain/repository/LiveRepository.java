@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wangxudong on 2017/4/1.
@@ -23,7 +24,7 @@ public class LiveRepository extends MongoRepository {
 
     private final String dbName = "YmtProducts";
 
-    private final String[] liveFields = "lid,sid,confirm,sid,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action"
+    private final String[] liveFields = "lid,sid,confirm,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action"
             .split(",");
 
     /**
@@ -54,6 +55,39 @@ public class LiveRepository extends MongoRepository {
                 query.criteria("action").equal(LiveActionEnum.Available.getCode())
         );
         return query.retrievedFields(true, liveFields).disableValidation().order("-lid").limit(1).get();
+    }
+
+    /**
+     *
+     * @param sellerIds
+     * @return
+     */
+    public List<Live> getSellerCurrentLiveList(List<Integer> sellerIds){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        Date now = Calendar.getInstance().getTime();
+        query.and(
+                query.criteria("sid").in(sellerIds),
+                query.criteria("start").lessThanOrEq(now),
+                query.criteria("end").greaterThanOrEq(now),
+                query.criteria("confirm").equal(true),
+                query.criteria("action").equal(LiveActionEnum.Available.getCode())
+        );
+        return query.retrievedFields(true, liveFields).disableValidation().asList();
+    }
+
+    public List<Live> getSellerCurrentLiveIdList(List<Integer> sellerIds){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        Date now = Calendar.getInstance().getTime();
+        query.and(
+                query.criteria("sid").in(sellerIds),
+                query.criteria("start").lessThanOrEq(now),
+                query.criteria("end").greaterThanOrEq(now),
+                query.criteria("confirm").equal(true),
+                query.criteria("action").equal(LiveActionEnum.Available.getCode())
+        );
+        return query.retrievedFields(true, "lid", "sid").disableValidation().asList();
     }
 
     /**

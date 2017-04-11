@@ -4,14 +4,19 @@ import com.google.common.cache.LoadingCache;
 import com.ymatou.liveinfo.domain.cache.ActivityCacheLoader;
 import com.ymatou.liveinfo.domain.cache.CacheFactory;
 import com.ymatou.liveinfo.domain.config.BizConfig;
+import com.ymatou.liveinfo.domain.model.Live;
 import com.ymatou.liveinfo.domain.repository.LiveRepository;
 import com.ymatou.liveinfo.facade.common.BizException;
 import com.ymatou.liveinfo.facade.model.ActivityInfo;
+import com.ymatou.liveinfo.facade.model.GetActivityIdsBySellerIdsRespData;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -56,5 +61,51 @@ public class LiveService {
         } catch (ExecutionException e) {
             throw new BizException("get activeinfo from cache faild,with sellerId:" + sellerId, e);
         }
+    }
+
+    /**
+     * 根据卖家id列表获取正在进行中直播列表
+     *
+     * @param sellerIdList
+     * @return
+     */
+    public List<ActivityInfo> getSellerCurrentActivityList(List<Integer> sellerIdList){
+        List<ActivityInfo> activityInfos = new ArrayList<>();
+        List<Live> sellerCurrentLiveList = liveRepository.getSellerCurrentLiveList(sellerIdList);
+        if(sellerCurrentLiveList != null || sellerCurrentLiveList.size() > 0){
+            for (Live live: sellerCurrentLiveList) {
+                ActivityInfo activityInfo = new ActivityInfo();
+                try {
+                    BeanUtils.copyProperties(activityInfo, live);
+                    activityInfos.add(activityInfo);
+                } catch (Exception e) {
+                    throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
+                }
+            }
+        }
+        return activityInfos;
+    }
+
+    /**
+     * 根据卖家id列表获取正在进行中直播Id列表
+     *
+     * @param sellerIdList
+     * @return
+     */
+    public List<GetActivityIdsBySellerIdsRespData.SellerAcitvityId> getSellerCurrentActivityIdList(List<Integer> sellerIdList){
+        List<GetActivityIdsBySellerIdsRespData.SellerAcitvityId> sellerAcitvityIds = new ArrayList<>();
+        List<Live> sellerCurrentLiveList = liveRepository.getSellerCurrentLiveIdList(sellerIdList);
+        if(sellerCurrentLiveList != null || sellerCurrentLiveList.size() > 0){
+            for (Live live: sellerCurrentLiveList) {
+                GetActivityIdsBySellerIdsRespData.SellerAcitvityId sellerAcitvityId = new GetActivityIdsBySellerIdsRespData.SellerAcitvityId();
+                try {
+                    BeanUtils.copyProperties(sellerAcitvityId, live);
+                    sellerAcitvityIds.add(sellerAcitvityId);
+                } catch (Exception e) {
+                    throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
+                }
+            }
+        }
+        return sellerAcitvityIds;
     }
 }

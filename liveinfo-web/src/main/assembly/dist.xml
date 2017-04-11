@@ -35,6 +35,7 @@
 			<directory>${project.basedir}/script</directory>
 			<includes>
 				<include>*.sh</include>
+				<include>ymt_env</include>
 			</includes>
 			<outputDirectory>bin</outputDirectory>
 		</fileSet>
