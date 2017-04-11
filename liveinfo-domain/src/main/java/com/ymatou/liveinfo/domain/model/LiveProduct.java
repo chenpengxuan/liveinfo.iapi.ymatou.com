@@ -1,5 +1,6 @@
 package com.ymatou.liveinfo.domain.model;
 
+import com.ymatou.liveinfo.facade.common.PrintFriendliness;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -10,7 +11,7 @@ import org.mongodb.morphia.annotations.Property;
  * 直播活动商品关系信息，冗余了一部分商品信息
  */
 @Entity(value = "LiveProducts", noClassnameStored = true)
-public class LiveProduct {
+public class LiveProduct extends PrintFriendliness {
 
     /**
      * 主键
@@ -82,6 +83,8 @@ public class LiveProduct {
      */
     @Property("tcatname")
     private String thirdCategoryName;
+
+
 
 
     public ObjectId getId() {
