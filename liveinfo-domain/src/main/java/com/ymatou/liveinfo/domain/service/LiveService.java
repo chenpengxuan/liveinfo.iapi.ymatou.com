@@ -108,4 +108,27 @@ public class LiveService {
         }
         return sellerAcitvityIds;
     }
+
+    /**
+     * 根据卖家id列表获取正在进行中直播列表
+     *
+     * @param liveIds
+     * @return
+     */
+    public List<ActivityInfo> getInProgressActivitiesByIds(List<Integer> liveIds){
+        List<ActivityInfo> activityInfos = new ArrayList<>();
+        List<Live> liveList = liveRepository.getInProgressLivesByIds(liveIds);
+        if(liveList != null || liveList.size() > 0){
+            for (Live live: liveList) {
+                ActivityInfo activityInfo = new ActivityInfo();
+                try {
+                    BeanUtils.copyProperties(activityInfo, live);
+                    activityInfos.add(activityInfo);
+                } catch (Exception e) {
+                    throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
+                }
+            }
+        }
+        return activityInfos;
+    }
 }

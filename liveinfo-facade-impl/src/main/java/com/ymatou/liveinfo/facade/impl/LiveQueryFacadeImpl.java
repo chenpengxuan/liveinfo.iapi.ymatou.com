@@ -61,4 +61,20 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
 
         return response;
     }
+
+    @Override
+    @POST
+    @Path("/{Activity:(?i:Activity)}/{ListInProgressActivitiesByIds:(?i:ListInProgressActivitiesByIds)}")
+    public BaseResponse ListInProgressActivitiesByIds(ListInProgressActivitiesByIdsReq req) {
+        BaseResponse response = new BaseResponse();
+        List<ActivityInfo> activityInfos = liveService.getInProgressActivitiesByIds(req.getActivityIds());
+
+        ListInProgressActivitiesByIdsRespData  respData = new ListInProgressActivitiesByIdsRespData();
+        respData.setActivities(activityInfos);
+        respData.setActivityCount(activityInfos.size());
+
+        response.setData(respData);
+
+        return response;
+    }
 }

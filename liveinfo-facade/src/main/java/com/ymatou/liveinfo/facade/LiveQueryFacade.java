@@ -3,6 +3,7 @@ package com.ymatou.liveinfo.facade;
 import com.ymatou.liveinfo.facade.common.BaseResponse;
 import com.ymatou.liveinfo.facade.model.GetActivityIdsBySellerIdsReq;
 import com.ymatou.liveinfo.facade.model.GetSellerActivityReq;
+import com.ymatou.liveinfo.facade.model.ListInProgressActivitiesByIdsReq;
 import com.ymatou.liveinfo.facade.model.ListInProgressActivitiesBySellerIdsReq;
 
 /**
@@ -30,4 +31,11 @@ public interface LiveQueryFacade {
      * @return
      */
     BaseResponse GetActivityIdsBySellerIds(GetActivityIdsBySellerIdsReq req);
+
+    /**
+     * 根据多个直播id获取直播列表
+     * @param req
+     * @return
+     */
+    BaseResponse ListInProgressActivitiesByIds(ListInProgressActivitiesByIdsReq req);
 }

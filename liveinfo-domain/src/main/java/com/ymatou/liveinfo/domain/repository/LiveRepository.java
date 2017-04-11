@@ -62,7 +62,7 @@ public class LiveRepository extends MongoRepository {
     }
 
     /**
-     *
+     * 批量获取买手正在进行中的直播信息
      * @param sellerIds
      * @return
      */
@@ -80,6 +80,27 @@ public class LiveRepository extends MongoRepository {
         return query.retrievedFields(true, liveFields).disableValidation().asList();
     }
 
+    /**
+     * 批量获取正在进行中的直播信息
+     * @param liveIds
+     * @return
+     */
+    public List<Live> getInProgressLivesByIds(List<Integer> liveIds){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        Date now = Calendar.getInstance().getTime();
+        query.and(
+                query.criteria("lid").in(liveIds),
+                query.criteria("action").equal(LiveActionEnum.Available.getCode())
+        );
+        return query.retrievedFields(true, liveFields).disableValidation().asList();
+    }
+
+    /**
+     * 批量获取买手进行中的直播
+     * @param sellerIds
+     * @return
+     */
     public List<Live> getSellerCurrentLiveIdList(List<Integer> sellerIds){
         Datastore datastore = getDatastore(dbName);
         Query<Live> query = datastore.find(Live.class);
