@@ -5,6 +5,8 @@ import com.ymatou.liveinfo.domain.model.Live;
 import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
 import com.ymatou.liveinfo.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.FindOptions;
+import org.mongodb.morphia.query.Meta;
 import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +28,8 @@ public class LiveRepository extends MongoRepository {
 
     private final String[] liveFields = "lid,sid,confirm,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action"
             .split(",");
+
+    private final FindOptions findOptionsLimitOne = new FindOptions().limit(1);
 
     /**
      * 获取到MongoClient
@@ -54,7 +58,7 @@ public class LiveRepository extends MongoRepository {
                 query.criteria("confirm").equal(true),
                 query.criteria("action").equal(LiveActionEnum.Available.getCode())
         );
-        return query.retrievedFields(true, liveFields).disableValidation().order("-lid").limit(1).get();
+        return query.retrievedFields(true, liveFields).disableValidation().order("-lid").get(findOptionsLimitOne);
     }
 
     /**
@@ -87,7 +91,7 @@ public class LiveRepository extends MongoRepository {
                 query.criteria("confirm").equal(true),
                 query.criteria("action").equal(LiveActionEnum.Available.getCode())
         );
-        return query.retrievedFields(true, "lid", "sid").disableValidation().asList();
+        return query.project("lid", true).project("sid", true).disableValidation().asList();
     }
 
     /**
@@ -100,7 +104,7 @@ public class LiveRepository extends MongoRepository {
         Query<Live> query = datastore.find(Live.class);
         query.field("lid").equal(liveId);
 
-        return query.retrievedFields(true, liveFields).disableValidation().limit(1).get();
+        return query.retrievedFields(true, liveFields).disableValidation().get(findOptionsLimitOne);
     }
 
     /**
@@ -135,6 +139,7 @@ public class LiveRepository extends MongoRepository {
         Datastore datastore = getDatastore(dbName);
         Query<Live> query = datastore.find(Live.class).disableValidation();
         return query.field("lid").equal(liveId)
+                .project(Meta.textScore())
                 .retrievedFields(true, this.liveFields)
                 .get();
     }

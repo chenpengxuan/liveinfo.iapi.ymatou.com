@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -28,9 +29,11 @@ public class ListInProgressActivitiesBySellerIdsTest extends BaseTest {
     private LiveQueryFacade liveQueryFacade;
 
     @Test
-    public void testGetSellerActivity(){
+    public void testGetSellerActivity() throws InterruptedException {
         Live live1 = buildLiveBaseInfo();
         liveRepository.insertLive(live1);
+
+        TimeUnit.MILLISECONDS.sleep(100);
 
         Live live2 = buildLiveBaseInfo();
         liveRepository.insertLive(live2);
