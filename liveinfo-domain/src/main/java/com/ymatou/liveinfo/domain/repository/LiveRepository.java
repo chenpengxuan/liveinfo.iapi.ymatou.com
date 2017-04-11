@@ -125,4 +125,64 @@ public class LiveRepository extends MongoRepository {
             return live.getActivityId();
         }
     }
+
+    /**
+     * 获取直播信息
+     * @param liveId
+     * @return
+     */
+    public Live getLive(int liveId){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class).disableValidation();
+        return query.field("lid").equal(liveId)
+                .retrievedFields(true, this.liveFields)
+                .get();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
