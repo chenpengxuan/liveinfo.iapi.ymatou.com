@@ -1,9 +1,8 @@
 package com.ymatou.liveinfo.facade.impl;
 
 import com.ymatou.liveinfo.facade.LiveQueryFacade;
-import com.ymatou.liveinfo.facade.model.ActivityInfo;
-import com.ymatou.liveinfo.facade.model.GetSellerActivityReq;
-import com.ymatou.liveinfo.facade.model.GetSellerActivityResp;
+import com.ymatou.liveinfo.facade.common.BaseResponse;
+import com.ymatou.liveinfo.facade.model.*;
 import com.ymatou.liveinfo.domain.service.LiveService;
 import org.springframework.stereotype.Component;
 
@@ -32,4 +31,26 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
         resp.setData(activityInfo);
         return resp;
     }
+
+    @Override
+    @GET
+    @Path("/{Activity:(?i:Activity)}/{GetActivityInfo:(?i:GetActivityInfo)}")
+    public BaseResponse getActivityInfo(@BeanParam GetActivityInfoReq req){
+        GetActivityInfoResp resp = this.liveService.getActivityInfo(req);
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(resp);
+        return baseResponse;
+    }
+
+    @Override
+    @GET
+    @Path("/{Activity:(?i:Activity)}/{SellerActivity:(?i:SellerActivity)}")
+    public BaseResponse getSellerLives(GetSellerLivesReq req) {
+        GetSellerLivesResp resp = this.liveService.getSellerLives(req);
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(resp);
+        return baseResponse;
+    }
+
+
 }

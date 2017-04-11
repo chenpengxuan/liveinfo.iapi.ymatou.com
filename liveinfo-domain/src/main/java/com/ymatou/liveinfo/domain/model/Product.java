@@ -27,7 +27,7 @@ public class Product {
      * 是否psp商品
      */
     @Property("ispsp")
-    private Boolean psp;
+    private boolean psp;
 
     /**
      * 商品图片
@@ -58,11 +58,11 @@ public class Product {
         this.productId = productId;
     }
 
-    public Boolean getPsp() {
+    public boolean isPsp() {
         return psp;
     }
 
-    public void setPsp(Boolean psp) {
+    public void setPsp(boolean psp) {
         this.psp = psp;
     }
 

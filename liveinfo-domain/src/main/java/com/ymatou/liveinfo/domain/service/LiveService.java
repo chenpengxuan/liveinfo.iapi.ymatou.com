@@ -4,14 +4,24 @@ import com.google.common.cache.LoadingCache;
 import com.ymatou.liveinfo.domain.cache.ActivityCacheLoader;
 import com.ymatou.liveinfo.domain.cache.CacheFactory;
 import com.ymatou.liveinfo.domain.config.BizConfig;
+import com.ymatou.liveinfo.domain.model.Live;
+import com.ymatou.liveinfo.domain.model.LiveProduct;
+import com.ymatou.liveinfo.domain.model.Product;
+import com.ymatou.liveinfo.domain.repository.LiveProductRepository;
 import com.ymatou.liveinfo.domain.repository.LiveRepository;
+import com.ymatou.liveinfo.domain.repository.ProductRepository;
+import com.ymatou.liveinfo.domain.utils.MappingUtils;
 import com.ymatou.liveinfo.facade.common.BizException;
-import com.ymatou.liveinfo.facade.model.ActivityInfo;
+import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
+import com.ymatou.liveinfo.facade.model.*;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -25,6 +35,10 @@ public class LiveService {
 
     @Resource
     private LiveRepository liveRepository;
+    @Resource
+    private LiveProductRepository liveProductRepository;
+    @Resource
+    private ProductRepository productRepository;
 
     @Resource
     private CacheFactory cacheFactory;
@@ -35,26 +49,206 @@ public class LiveService {
     @Resource
     private BizConfig bizConfig;
 
+
     /**
      * 获取买手当前的直播信息
+     *
      * @param sellerId
      * @return
      */
-    public ActivityInfo getSellerCurrentActivity(int sellerId){
-        if(activityCacheLoader.disableCache()){ // 禁用缓存
+    public ActivityInfo getSellerCurrentActivity(int sellerId) {
+        if (activityCacheLoader.disableCache()) { // 禁用缓存
             return activityCacheLoader.getByRepository(sellerId);
         }
 
-        LoadingCache<Integer, Optional<ActivityInfo>> activityCache = cacheFactory.getCache( activityCacheLoader );
+        LoadingCache<Integer, Optional<ActivityInfo>> activityCache = cacheFactory.getCache(activityCacheLoader);
         try {
             Optional<ActivityInfo> cacheResult = activityCache.get(sellerId);
-            if(cacheResult.isPresent()){
+            if (cacheResult.isPresent()) {
                 return cacheResult.get();
-            }else {
+            } else {
                 return null;
             }
         } catch (ExecutionException e) {
             throw new BizException("get activeinfo from cache faild,with sellerId:" + sellerId, e);
         }
     }
+
+    /**
+     * 获取直播详情
+     * @param req
+     * @return
+     */
+    public GetActivityInfoResp getActivityInfo(GetActivityInfoReq req) {
+        //获取直播信息
+        Live live = this.liveRepository.getLiveById(req.getActivityId());
+        if (live == null) {
+            return null;
+        }
+        if (live.getAction() != LiveActionEnum.Available.getCode()) {
+            logger.warn(String.format("getActivityInfo live:%d is not available", req.getActivityId()));
+            return null;
+        }
+
+        GetActivityInfoResp resp = new GetActivityInfoResp();
+        try {
+            BeanUtils.copyProperties(resp, live);
+        } catch (Exception e) {
+            throw new BizException("getActivityInfo BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
+        }
+        //返回需要包含商品
+        if (req.isIncludeProducts()) {
+            List<ProductInfo> productInfos = this.getProductInfoesOfLive(req.getActivityId(), 10);
+            resp.setProductList(productInfos);
+        }
+
+        //获取品牌品类
+        if(this.bizConfig.isEnableBrandList() == false){
+            return resp;
+        }
+
+        List<GetActivityInfoResp.BrandInfo> brandInfos = new ArrayList<>();
+        resp.setBrandList(brandInfos);
+        //获取直播品牌
+        List<LiveProduct> brandsOfLive = this.liveProductRepository.getBrandsOfLive(req.getActivityId());
+        for (LiveProduct brandOfLive: brandsOfLive) {
+            GetActivityInfoResp.BrandInfo brandInfo = new GetActivityInfoResp.BrandInfo();
+            brandInfo.setBrandEnName(brandOfLive.getBrandEnName());
+            brandInfo.setBrandId(brandOfLive.getBrandId());
+            brandInfo.setBrandName(brandOfLive.getBrandName());
+            brandInfo.setBrandType(1);
+            brandInfo.setCategoryId(0);
+            brandInfo.setParentId(0);
+            brandInfo.setParentName("");
+            brandInfos.add(brandInfo);
+        }
+        //获取直播品类
+        List<LiveProduct> categoriesOfLive = this.liveProductRepository.getCategoriesOfLive(req.getActivityId());
+        for (LiveProduct categoryOfLive: categoriesOfLive) {
+            GetActivityInfoResp.BrandInfo brandInfo = new GetActivityInfoResp.BrandInfo();
+            brandInfo.setBrandEnName("");
+            brandInfo.setBrandId(0);
+            brandInfo.setBrandName("");
+            brandInfo.setBrandType(2);
+            brandInfo.setCategoryId(categoryOfLive.getThirdCategoryId());
+            brandInfo.setParentId(categoryOfLive.getSecondCategoryId());
+            brandInfo.setParentName(categoryOfLive.getSecondCategoryName());
+            brandInfos.add(brandInfo);
+        }
+        return resp;
+    }
+
+    /**
+     * 获取买手直播列表
+     * @param req
+     * @return
+     */
+    public GetSellerLivesResp getSellerLives(GetSellerLivesReq req){
+        GetSellerLivesResp resp = new GetSellerLivesResp();
+
+        //获取当前进行的直播
+        ActivityComplexInfo currentActivityInfo = null;
+        Live currentLive = this.liveRepository.getSellerCurrentLive(req.getSellerId());
+        if(currentLive != null){
+            currentActivityInfo = MappingUtils.toActivityComplexInfo(currentLive);
+
+            //获取当前直播商品
+            currentActivityInfo.setProductList(this.getProductInfoesOfLive(currentActivityInfo.getActivityId(), 3));
+        }
+        resp.setInProgressActivity(currentActivityInfo);
+
+        //获取商家历史直播
+        List<ActivityInfo> historyActivityInfoes = new ArrayList<>();
+        if(req.isSingle() == false){
+            List<Live> lives = this.liveRepository.getSellerHistoryLives(req.getSellerId(), this.bizConfig.getHistoryLiveQuantity());
+            historyActivityInfoes = MappingUtils.toActivityInfoes(lives);
+        }
+        resp.setHistoryActivities(historyActivityInfoes);
+        return resp;
+    }
+
+    /**
+     * 获取直播的商品信息
+     * @param liveId
+     * @param limit
+     * @return
+     */
+    private List<ProductInfo> getProductInfoesOfLive(int liveId, int limit){
+        List<ProductInfo> productInfos = new ArrayList<>();
+
+        List<String> productIds = this.liveProductRepository.getProductIdsByLive(liveId, 10);
+        if (productIds.size() > 0) {
+            List<Product> products = this.productRepository.getProducts(productIds);
+            for (Product product : products) {
+                ProductInfo productInfo = new ProductInfo();
+                productInfo.setNewGuestPrice(product.getPrice());
+                productInfo.setPrice(product.getPrice());
+                productInfo.setProductId(product.getProductId());
+                productInfo.setPsp(product.isPsp());
+                productInfo.setSellStatus(1);
+                productInfo.setVipPrice(product.getPrice());
+                if (product.getPictures() != null && product.getPictures().length > 0) {
+                    productInfo.setPicUrl(product.getPictures()[0]);
+                } else {
+                    productInfo.setPicUrl("");
+                }
+                productInfos.add(productInfo);
+            }
+        }
+        return productInfos;
+    }
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

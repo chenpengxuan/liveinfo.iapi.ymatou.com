@@ -23,7 +23,7 @@ public class LiveProduct extends PrintFriendliness {
      * 直播Id
      */
     @Property("lid")
-    private Integer liveId;
+    private int liveId;
 
     /**
      * 商品Id
@@ -34,7 +34,7 @@ public class LiveProduct extends PrintFriendliness {
      * 品牌Id
      */
     @Property("bid")
-    private Integer brandId;
+    private int brandId;
 
     /**
      * 品牌名称
@@ -52,7 +52,7 @@ public class LiveProduct extends PrintFriendliness {
      * 一级分类
      */
     @Property("mcatid")
-    private Integer firstCategoryId;
+    private int firstCategoryId;
 
     /**
      * 一级分类名称
@@ -64,7 +64,7 @@ public class LiveProduct extends PrintFriendliness {
      * 二级分类Id
      */
     @Property("scatid")
-    private Integer secondCategoryId;
+    private int secondCategoryId;
 
     /**
      * 二级分类名称
@@ -76,15 +76,13 @@ public class LiveProduct extends PrintFriendliness {
      * 三级分类Id
      */
     @Property("tcatid")
-    private Integer thirdCategoryId;
+    private int thirdCategoryId;
 
     /**
      * 三级分类名称
      */
     @Property("tcatname")
     private String thirdCategoryName;
-
-
 
 
     public ObjectId getId() {
@@ -95,11 +93,11 @@ public class LiveProduct extends PrintFriendliness {
         this.id = id;
     }
 
-    public Integer getLiveId() {
+    public int getLiveId() {
         return liveId;
     }
 
-    public void setLiveId(Integer liveId) {
+    public void setLiveId(int liveId) {
         this.liveId = liveId;
     }
 
@@ -111,11 +109,11 @@ public class LiveProduct extends PrintFriendliness {
         this.productId = productId;
     }
 
-    public Integer getBrandId() {
+    public int getBrandId() {
         return brandId;
     }
 
-    public void setBrandId(Integer brandId) {
+    public void setBrandId(int brandId) {
         this.brandId = brandId;
     }
 
@@ -135,11 +133,11 @@ public class LiveProduct extends PrintFriendliness {
         this.brandEnName = brandEnName;
     }
 
-    public Integer getFirstCategoryId() {
+    public int getFirstCategoryId() {
         return firstCategoryId;
     }
 
-    public void setFirstCategoryId(Integer firstCategoryId) {
+    public void setFirstCategoryId(int firstCategoryId) {
         this.firstCategoryId = firstCategoryId;
     }
 
@@ -151,11 +149,11 @@ public class LiveProduct extends PrintFriendliness {
         this.firstCategoryName = firstCategoryName;
     }
 
-    public Integer getSecondCategoryId() {
+    public int getSecondCategoryId() {
         return secondCategoryId;
     }
 
-    public void setSecondCategoryId(Integer secondCategoryId) {
+    public void setSecondCategoryId(int secondCategoryId) {
         this.secondCategoryId = secondCategoryId;
     }
 
@@ -167,11 +165,11 @@ public class LiveProduct extends PrintFriendliness {
         this.secondCategoryName = secondCategoryName;
     }
 
-    public Integer getThirdCategoryId() {
+    public int getThirdCategoryId() {
         return thirdCategoryId;
     }
 
-    public void setThirdCategoryId(Integer thirdCategoryId) {
+    public void setThirdCategoryId(int thirdCategoryId) {
         this.thirdCategoryId = thirdCategoryId;
     }
 
