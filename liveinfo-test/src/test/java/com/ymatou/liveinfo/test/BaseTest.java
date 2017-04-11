@@ -59,7 +59,7 @@ public class BaseTest {
         live.setFlag("Live-Flag-" + random);
         live.setAddTime(Calendar.getInstance().getTime());
         live.setLatLng("30;30");
-        live.setSellerId(new Random().nextInt(1000));
+        live.setSellerId(new Random().nextInt(10000000) + 60000000);
         live.setShopAddress("Live-ShopAddress-" + random);
         live.setTitle("Live-Title-" + random);
         live.setVideoCover("Live-VideoCover-" + random);

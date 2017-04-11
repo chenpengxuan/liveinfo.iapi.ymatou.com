@@ -1,16 +1,15 @@
-package com.ymatou.liveinfo.test.facade.model;
+package com.ymatou.liveinfo.test.facade;
 
 import com.ymatou.liveinfo.domain.model.Live;
 import com.ymatou.liveinfo.facade.LiveQueryFacade;
+import com.ymatou.liveinfo.facade.common.BaseResponse;
 import com.ymatou.liveinfo.facade.enums.ActivityStateEnum;
 import com.ymatou.liveinfo.facade.model.ActivityInfo;
 import com.ymatou.liveinfo.facade.model.GetSellerActivityReq;
-import com.ymatou.liveinfo.facade.model.GetSellerActivityResp;
 import com.ymatou.liveinfo.test.BaseTest;
 import org.junit.Test;
 
 import javax.annotation.Resource;
-
 import java.util.Calendar;
 
 import static junit.framework.TestCase.assertNull;
@@ -38,7 +37,7 @@ public class GetSellerActivityTest extends BaseTest {
 
         GetSellerActivityReq req = new GetSellerActivityReq();
         req.setSellerId(live.getSellerId());
-        GetSellerActivityResp resp = liveQueryFacade.getSellerActivity(req);
+        BaseResponse resp = liveQueryFacade.getSellerActivity(req);
         assertEquals(200, resp.getCode());
 
         ActivityInfo activityInfo = (ActivityInfo)resp.getData();
@@ -62,7 +61,7 @@ public class GetSellerActivityTest extends BaseTest {
 
         GetSellerActivityReq req = new GetSellerActivityReq();
         req.setSellerId(live.getSellerId());
-        GetSellerActivityResp resp = liveQueryFacade.getSellerActivity(req);
+        BaseResponse resp = liveQueryFacade.getSellerActivity(req);
         assertEquals(200, resp.getCode());
 
         ActivityInfo activityInfo = (ActivityInfo)resp.getData();

@@ -6,6 +6,9 @@ import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
 import com.ymatou.liveinfo.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.*;
+import org.mongodb.morphia.query.FindOptions;
+import org.mongodb.morphia.query.Meta;
+import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -25,8 +28,10 @@ public class LiveRepository extends MongoRepository {
 
     private final String dbName = "YmtProducts";
 
-    private final String[] liveFields = "lid,sid,confirm,sid,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action"
+    private final String[] liveFields = "lid,sid,confirm,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action"
             .split(",");
+
+    private final FindOptions findOptionsLimitOne = new FindOptions().limit(1);
 
     /**
      * 获取到MongoClient
@@ -55,7 +60,61 @@ public class LiveRepository extends MongoRepository {
                 query.criteria("confirm").equal(true),
                 query.criteria("action").equal(LiveActionEnum.Available.getCode())
         );
-        return query.retrievedFields(true, liveFields).disableValidation().order("-lid").limit(1).get();
+        return query.retrievedFields(true, liveFields).disableValidation().order("-lid").get(findOptionsLimitOne);
+    }
+
+    /**
+     * 批量获取买手正在进行中的直播信息
+     * @param sellerIds
+     * @return
+     */
+    public List<Live> getSellerCurrentLiveList(List<Integer> sellerIds){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        Date now = Calendar.getInstance().getTime();
+        query.and(
+                query.criteria("sid").in(sellerIds),
+                query.criteria("start").lessThanOrEq(now),
+                query.criteria("end").greaterThanOrEq(now),
+                query.criteria("confirm").equal(true),
+                query.criteria("action").equal(LiveActionEnum.Available.getCode())
+        );
+        return query.retrievedFields(true, liveFields).disableValidation().asList();
+    }
+
+    /**
+     * 批量获取正在进行中的直播信息
+     * @param liveIds
+     * @return
+     */
+    public List<Live> getInProgressLivesByIds(List<Integer> liveIds){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        Date now = Calendar.getInstance().getTime();
+        query.and(
+                query.criteria("lid").in(liveIds),
+                query.criteria("action").equal(LiveActionEnum.Available.getCode())
+        );
+        return query.retrievedFields(true, liveFields).disableValidation().asList();
+    }
+
+    /**
+     * 批量获取买手进行中的直播
+     * @param sellerIds
+     * @return
+     */
+    public List<Live> getSellerCurrentLiveIdList(List<Integer> sellerIds){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        Date now = Calendar.getInstance().getTime();
+        query.and(
+                query.criteria("sid").in(sellerIds),
+                query.criteria("start").lessThanOrEq(now),
+                query.criteria("end").greaterThanOrEq(now),
+                query.criteria("confirm").equal(true),
+                query.criteria("action").equal(LiveActionEnum.Available.getCode())
+        );
+        return query.project("lid", true).project("sid", true).disableValidation().asList();
     }
 
     /**
@@ -68,7 +127,7 @@ public class LiveRepository extends MongoRepository {
         Query<Live> query = datastore.find(Live.class);
         query.field("lid").equal(liveId);
 
-        return query.retrievedFields(true, liveFields).disableValidation().limit(1).get();
+        return query.retrievedFields(true, liveFields).disableValidation().get(findOptionsLimitOne);
     }
 
     /**
