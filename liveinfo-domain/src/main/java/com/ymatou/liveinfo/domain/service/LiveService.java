@@ -9,6 +9,7 @@ import com.ymatou.liveinfo.domain.repository.LiveRepository;
 import com.ymatou.liveinfo.facade.common.BizException;
 import com.ymatou.liveinfo.facade.model.ActivityInfo;
 import com.ymatou.liveinfo.facade.model.GetActivityIdsBySellerIdsRespData;
+import com.ymatou.liveinfo.facade.model.GetProductListByLiveIdReq;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,5 +131,16 @@ public class LiveService {
             }
         }
         return activityInfos;
+    }
+
+    /**
+     * 查找直播中的商品
+     * @param req
+     * @return
+     */
+    public List<String> searchProductListByLiveId(GetProductListByLiveIdReq req){
+        List<String> prodIds = new ArrayList<>();
+
+        return prodIds;
     }
 }

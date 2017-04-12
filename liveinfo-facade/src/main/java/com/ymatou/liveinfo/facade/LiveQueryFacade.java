@@ -1,10 +1,7 @@
 package com.ymatou.liveinfo.facade;
 
 import com.ymatou.liveinfo.facade.common.BaseResponse;
-import com.ymatou.liveinfo.facade.model.GetActivityIdsBySellerIdsReq;
-import com.ymatou.liveinfo.facade.model.GetSellerActivityReq;
-import com.ymatou.liveinfo.facade.model.ListInProgressActivitiesByIdsReq;
-import com.ymatou.liveinfo.facade.model.ListInProgressActivitiesBySellerIdsReq;
+import com.ymatou.liveinfo.facade.model.*;
 
 /**
  * 直播查询API
@@ -23,19 +20,26 @@ public interface LiveQueryFacade {
      * @param req
      * @return
      */
-    BaseResponse ListInProgressActivitiesBySellerIds(ListInProgressActivitiesBySellerIdsReq req);
+    BaseResponse listInProgressActivitiesBySellerIds(ListInProgressActivitiesBySellerIdsReq req);
 
     /**
      * 根据卖家id列表获取正在进行中直播ID列表
      * @param req
      * @return
      */
-    BaseResponse GetActivityIdsBySellerIds(GetActivityIdsBySellerIdsReq req);
+    BaseResponse getActivityIdsBySellerIds(GetActivityIdsBySellerIdsReq req);
 
     /**
      * 根据多个直播id获取直播列表
      * @param req
      * @return
      */
-    BaseResponse ListInProgressActivitiesByIds(ListInProgressActivitiesByIdsReq req);
+    BaseResponse listInProgressActivitiesByIds(ListInProgressActivitiesByIdsReq req);
+
+    /**
+     * 根据直播Id获取商品Id列表
+     * @param req
+     * @return
+     */
+    BaseResponse getProductListByLiveId(GetProductListByLiveIdReq req);
 }

@@ -49,7 +49,7 @@ public class ListInProgressActivitiesBySellerIdsTest extends BaseTest {
         sellerIds.add(live2.getSellerId());
         req.setSellerIds(sellerIds);
 
-        BaseResponse resp = liveQueryFacade.ListInProgressActivitiesBySellerIds(req);
+        BaseResponse resp = liveQueryFacade.listInProgressActivitiesBySellerIds(req);
         assertEquals(200, resp.getCode());
 
         ListInProgressActivitiesBySellerIdsRespData respData = (ListInProgressActivitiesBySellerIdsRespData)resp.getData();
@@ -69,7 +69,7 @@ public class ListInProgressActivitiesBySellerIdsTest extends BaseTest {
         List<Integer> sellerIds = new ArrayList<>();
         req.setSellerIds(sellerIds);
 
-        BaseResponse resp = liveQueryFacade.ListInProgressActivitiesBySellerIds(req);
+        BaseResponse resp = liveQueryFacade.listInProgressActivitiesBySellerIds(req);
         assertEquals(400, resp.getCode());
         assertEquals("错误的请求参数|卖家Id不能为空", resp.getMessage());
 

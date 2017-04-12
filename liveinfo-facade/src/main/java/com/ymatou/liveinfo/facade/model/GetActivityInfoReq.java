@@ -15,7 +15,7 @@ public class GetActivityInfoReq extends BaseRequest {
      * 直播活动Id
      */
     @QueryParam("activityId")
-    @Min(value = 1, message = "无效的活动Id")
+    @Min(value = 1, message = "无效的直播Id")
     private int activityId;
 
     /**

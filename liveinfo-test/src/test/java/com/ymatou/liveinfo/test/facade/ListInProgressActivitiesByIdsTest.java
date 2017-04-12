@@ -44,7 +44,7 @@ public class ListInProgressActivitiesByIdsTest extends BaseTest {
         liveIds.add(live2.getActivityId());
         req.setActivityIds(liveIds);
 
-        BaseResponse resp = liveQueryFacade.ListInProgressActivitiesByIds(req);
+        BaseResponse resp = liveQueryFacade.listInProgressActivitiesByIds(req);
         assertEquals(200, resp.getCode());
 
         ListInProgressActivitiesByIdsRespData respData = (ListInProgressActivitiesByIdsRespData)resp.getData();

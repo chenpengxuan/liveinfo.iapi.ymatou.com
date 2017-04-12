@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import javax.annotation.Resource;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
@@ -47,13 +48,14 @@ public class GetSellerActivityTest extends BaseTest {
     }
 
     @Test
-    public void testGetSellerActivityWhenAcitvityStateNotStart() {
+    public void testGetSellerActivityWhenAcitvityStateNotStart() throws InterruptedException {
         Live live = buildLiveBaseInfo();
         live.setStartTime(getDateFormNow(Calendar.HOUR, 2));
         live.setEndTime(getDateFormNow(Calendar.HOUR, 3));
         liveRepository.insertLive(live);
 
         System.out.println("LiveId:" + live.getActivityId());
+        TimeUnit.MILLISECONDS.sleep(100);
 
         Live sellerCurrentLive = liveRepository.getLiveById(live.getActivityId());
         assertNotNull(sellerCurrentLive);

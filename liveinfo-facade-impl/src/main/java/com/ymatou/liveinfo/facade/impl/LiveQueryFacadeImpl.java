@@ -33,7 +33,7 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
     @Override
     @POST
     @Path("/{Activity:(?i:Activity)}/{ListInProgressActivitiesBySellerIds:(?i:ListInProgressActivitiesBySellerIds)}")
-    public BaseResponse ListInProgressActivitiesBySellerIds(ListInProgressActivitiesBySellerIdsReq req) {
+    public BaseResponse listInProgressActivitiesBySellerIds(ListInProgressActivitiesBySellerIdsReq req) {
         BaseResponse response = new BaseResponse();
         List<ActivityInfo> activityInfos = liveService.getSellerCurrentActivityList(req.getSellerIds());
 
@@ -49,7 +49,7 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
     @Override
     @POST
     @Path("/{Activity:(?i:Activity)}/{GetActivityIdsBySellerIds:(?i:GetActivityIdsBySellerIds)}")
-    public BaseResponse GetActivityIdsBySellerIds(GetActivityIdsBySellerIdsReq req) {
+    public BaseResponse getActivityIdsBySellerIds(GetActivityIdsBySellerIdsReq req) {
         BaseResponse response = new BaseResponse();
         List<GetActivityIdsBySellerIdsRespData.SellerAcitvityId> sellerAcitvityIds
                 = liveService.getSellerCurrentActivityIdList(req.getSellerIds());
@@ -65,7 +65,7 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
     @Override
     @POST
     @Path("/{Activity:(?i:Activity)}/{ListInProgressActivitiesByIds:(?i:ListInProgressActivitiesByIds)}")
-    public BaseResponse ListInProgressActivitiesByIds(ListInProgressActivitiesByIdsReq req) {
+    public BaseResponse listInProgressActivitiesByIds(ListInProgressActivitiesByIdsReq req) {
         BaseResponse response = new BaseResponse();
         List<ActivityInfo> activityInfos = liveService.getInProgressActivitiesByIds(req.getActivityIds());
 
@@ -73,6 +73,21 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
         respData.setActivities(activityInfos);
         respData.setActivityCount(activityInfos.size());
 
+        response.setData(respData);
+
+        return response;
+    }
+
+    @Override
+    @GET
+    @Path("/{Product:(?i:Product)}/{GetProductListByLiveId:(?i:GetProductListByLiveId)}")
+    public BaseResponse getProductListByLiveId(@BeanParam GetProductListByLiveIdReq req) {
+        BaseResponse response = new BaseResponse();
+
+        List<String> prodIds = liveService.searchProductListByLiveId(req);
+
+        GetProductListByLiveIdRespData respData = new GetProductListByLiveIdRespData();
+        respData.setProductIdList(prodIds);
         response.setData(respData);
 
         return response;

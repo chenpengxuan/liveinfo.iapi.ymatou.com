@@ -41,7 +41,7 @@ public class GetActivityIdsBySellerIdsTest extends BaseTest {
         sellerIds.add(live2.getSellerId());
         req.setSellerIds(sellerIds);
 
-        BaseResponse resp = liveQueryFacade.GetActivityIdsBySellerIds(req);
+        BaseResponse resp = liveQueryFacade.getActivityIdsBySellerIds(req);
         assertEquals(200, resp.getCode());
 
         GetActivityIdsBySellerIdsRespData respData = (GetActivityIdsBySellerIdsRespData)resp.getData();
