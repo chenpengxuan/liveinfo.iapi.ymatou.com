@@ -1,5 +1,6 @@
 package com.ymatou.liveinfo.facade.impl;
 
+
 import com.ymatou.liveinfo.domain.service.LiveService;
 import com.ymatou.liveinfo.facade.LiveQueryFacade;
 import com.ymatou.liveinfo.facade.common.BaseResponse;
@@ -31,6 +32,26 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
     }
 
     @Override
+    @GET
+    @Path("/{Activity:(?i:Activity)}/{GetActivityInfo:(?i:GetActivityInfo)}")
+    public BaseResponse getActivityInfo(@BeanParam GetActivityInfoReq req){
+        GetActivityInfoResp resp = this.liveService.getActivityInfo(req);
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(resp);
+        return baseResponse;
+    }
+
+    @Override
+    @GET
+    @Path("/{Activity:(?i:Activity)}/{SellerActivity:(?i:SellerActivity)}")
+    public BaseResponse getSellerLives(GetSellerLivesReq req) {
+        GetSellerLivesResp resp = this.liveService.getSellerLives(req);
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(resp);
+        return baseResponse;
+    }
+
+
     @POST
     @Path("/{Activity:(?i:Activity)}/{ListInProgressActivitiesBySellerIds:(?i:ListInProgressActivitiesBySellerIds)}")
     public BaseResponse listInProgressActivitiesBySellerIds(ListInProgressActivitiesBySellerIdsReq req) {

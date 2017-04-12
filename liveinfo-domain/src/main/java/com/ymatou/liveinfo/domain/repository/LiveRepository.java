@@ -5,12 +5,14 @@ import com.ymatou.liveinfo.domain.model.Live;
 import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
 import com.ymatou.liveinfo.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.*;
 import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Meta;
 import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -152,17 +154,24 @@ public class LiveRepository extends MongoRepository {
     }
 
     /**
-     * 获取直播信息
-     * @param liveId
+     * 获取商家历史直播信息
+     * @param sellerId
+     * @param limit
      * @return
      */
-    public Live getLive(int liveId){
+    public List<Live> getSellerHistoryLives(int sellerId, int limit){
+        List<Live> lives = new ArrayList<>();
         Datastore datastore = getDatastore(dbName);
-        Query<Live> query = datastore.find(Live.class).disableValidation();
-        return query.field("lid").equal(liveId)
-                .project(Meta.textScore())
-                .retrievedFields(true, this.liveFields)
-                .get();
+        Query<Live> query = datastore.find(Live.class).disableValidation()
+                .retrievedFields(true, liveFields)
+                .retrievedFields(false, "_id");
+        return query.field("sid").equal(sellerId)
+                .field("action").equal(LiveActionEnum.Available.getCode())
+                .field("end").lessThan(new Date())
+                .field("confirm").equal(true)
+                .limit(limit)
+                .order("-lid")
+                .asList();
     }
 }
 

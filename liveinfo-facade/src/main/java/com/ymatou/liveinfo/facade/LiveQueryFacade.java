@@ -16,6 +16,20 @@ public interface LiveQueryFacade {
     BaseResponse getSellerActivity(GetSellerActivityReq req);
 
     /**
+     * 获取直播详情
+     * @param req
+     * @return
+     */
+    BaseResponse getActivityInfo(GetActivityInfoReq req);
+
+    /**
+     * 获取商家直播信息
+     * @param req
+     * @return
+     */
+    BaseResponse getSellerLives(GetSellerLivesReq req);
+
+    /**
      * 根据卖家id列表获取正在进行中直播列表
      * @param req
      * @return
