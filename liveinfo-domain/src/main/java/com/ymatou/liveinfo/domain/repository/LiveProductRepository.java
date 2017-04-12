@@ -27,6 +27,8 @@ public class LiveProductRepository extends MongoRepository {
 
     private final String dbName = "YmtProducts";
 
+    private final String[] liveProductFields = "spid,brand,tcatname,bid,tcatid,scatid".split(",");
+
     /**
      * 获取到MongoClient
      *
@@ -61,6 +63,27 @@ public class LiveProductRepository extends MongoRepository {
         List<LiveProduct> liveProductList = query.asList();
         return liveProductList.stream().map((liveProduct)->{return liveProduct.getProductId();})
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 根据直播Id查找在售的商品
+     * @param liveId
+     * @return
+     */
+    public List<LiveProduct> getLiveProductsByLive(int liveId){
+        Date now = new Date();
+        Datastore datastore = getDatastore(dbName);
+        Query query = datastore.find(LiveProduct.class).disableValidation()
+                .field("lid").equal(liveId)
+                .field("status").equal(1)
+                .field("start").lessThanOrEq(now)
+                .field("end").greaterThanOrEq(now)
+                .order("sort")
+                .retrievedFields(true, liveProductFields);
+
+        List<LiveProduct> liveProductList = query.asList();
+
+        return liveProductList;
     }
 
     /**

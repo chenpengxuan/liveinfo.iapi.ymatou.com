@@ -16,12 +16,14 @@ import com.ymatou.liveinfo.domain.utils.MappingUtils;
 import com.ymatou.liveinfo.facade.common.BizException;
 
 import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
+import com.ymatou.liveinfo.facade.enums.ProductInLiveSearchTypeEnum;
 import com.ymatou.liveinfo.facade.model.*;
 
 import com.ymatou.liveinfo.facade.model.ActivityInfo;
 import com.ymatou.liveinfo.facade.model.GetActivityIdsBySellerIdsRespData;
 import com.ymatou.liveinfo.facade.model.GetProductListByLiveIdReq;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 /**
  * Created by wangxudong on 2017/4/1.
@@ -64,20 +67,17 @@ public class LiveService {
      * @return
      */
     public ActivityInfo getSellerCurrentActivity(int sellerId) {
-        if (activityCacheLoader.disableCache()) { // 禁用缓存
-            return activityCacheLoader.getByRepository(sellerId);
+        Live live = liveRepository.getSellerCurrentLive(sellerId);
+        if(live == null){
+            return  null;
         }
 
-        LoadingCache<Integer, Optional<ActivityInfo>> activityCache = cacheFactory.getCache(activityCacheLoader);
+        ActivityInfo activityInfo = new ActivityInfo();
         try {
-            Optional<ActivityInfo> cacheResult = activityCache.get(sellerId);
-            if (cacheResult.isPresent()) {
-                return cacheResult.get();
-            } else {
-                return null;
-            }
-        } catch (ExecutionException e) {
-            throw new BizException("get activeinfo from cache faild,with sellerId:" + sellerId, e);
+            BeanUtils.copyProperties(activityInfo, live);
+            return activityInfo;
+        } catch (Exception e) {
+            throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
         }
     }
 
@@ -205,12 +205,6 @@ public class LiveService {
         return productInfos;
     }
 
-
-
-
-
-
-
     /**
      * 根据卖家id列表获取正在进行中直播列表
      *
@@ -287,8 +281,59 @@ public class LiveService {
      */
     public List<String> searchProductListByLiveId(GetProductListByLiveIdReq req){
         List<String> prodIds = new ArrayList<>();
+        List<LiveProduct> liveProducts = liveProductRepository.getLiveProductsByLive(req.getLiveId());
+
+        if(liveProducts == null || liveProducts.size() == 0){
+            return prodIds;
+        }
+
+        ProductInLiveSearchTypeEnum searchTypeEnum = ProductInLiveSearchTypeEnum.getByCode(req.getSearchType());
+        if(searchTypeEnum == null || ProductInLiveSearchTypeEnum.All.equals(searchTypeEnum)){
+            return liveProducts.stream().map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
+        }
+
+        if(StringUtils.isBlank(req.getKeyword()) && !ProductInLiveSearchTypeEnum.BrandIdAndCategoryId.equals(searchTypeEnum)){
+            return liveProducts.stream().map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
+        }
+
+        switch (searchTypeEnum) {
+            case All:
+                break;
+            case BrandName:
+                return liveProducts.stream().filter(liveProduct -> {
+                    return !StringUtils.isBlank(req.getBrandIdList()) && req.getBrandIdList().contains(liveProduct.getBrandName());
+                }).map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
+            case CategoryName:
+                break;
+            case BrandIdAndCategoryId:
+                break;
+        }
 
         return prodIds;
+    }
+
+    /**
+     * 获取买手当前的直播信息
+     *
+     * @param sellerId
+     * @return
+     */
+    public ActivityInfo getSellerCurrentActivity_bak(int sellerId) {
+        if (activityCacheLoader.disableCache()) { // 禁用缓存
+            return activityCacheLoader.getByRepository(sellerId);
+        }
+
+        LoadingCache<Integer, Optional<ActivityInfo>> activityCache = cacheFactory.getCache(activityCacheLoader);
+        try {
+            Optional<ActivityInfo> cacheResult = activityCache.get(sellerId);
+            if (cacheResult.isPresent()) {
+                return cacheResult.get();
+            } else {
+                return null;
+            }
+        } catch (ExecutionException e) {
+            throw new BizException("get activeinfo from cache faild,with sellerId:" + sellerId, e);
+        }
     }
 }
 
