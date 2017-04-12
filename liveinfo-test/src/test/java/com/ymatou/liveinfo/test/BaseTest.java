@@ -10,7 +10,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -42,6 +41,8 @@ public class BaseTest {
         endTime.add(Calendar.HOUR, 1);
 
         String random = UUID.randomUUID().toString();
+
+
 
         int liveId = liveRepository.getMaxLiveId() + 1;
         if (liveId < 9000000) {
@@ -126,7 +127,7 @@ public class BaseTest {
 
         Product product = new Product();
         product.setPictures(new String[]{pic1, pic2, pic3});
-        product.setPrice(new BigDecimal("100.90"));
+        product.setPrice("100.5,90.00,10.00");
         product.setProductId(uuid);
         product.setPsp(true);
         return product;
