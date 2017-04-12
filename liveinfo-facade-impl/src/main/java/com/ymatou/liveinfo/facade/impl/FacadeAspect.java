@@ -61,19 +61,17 @@ public class FacadeAspect {
 
         } catch (BizException e) {
             resp = builErrorResponse(joinPoint, e.getErrorCode(), e.getLocalizedMessage());
-            logger.warn(String.format("Failed to execute request: %s.", req.toString()), e);
+            logger.error(String.format("Failed to execute request: %s.", req.toString()), e);
 
         } catch (Throwable e) {
             resp = builErrorResponse(joinPoint, ResponseCode.UNKNOWN, e.getLocalizedMessage());
             logger.error(String.format("Unknown error in executing request:%s", req.toString()), e);
         } finally {
-            logger.info("Resp:" + resp);
+            long consumedTime = System.currentTimeMillis() - startTime;
+            logger.info("Finished {}, Consumed:{}ms", getRequestFlag(req), consumedTime);
+            MDC.clear();
         }
 
-        long consumedTime = System.currentTimeMillis() - startTime;
-        logger.info("Finished {}, Consumed:{}ms", getRequestFlag(req), consumedTime);
-
-        MDC.clear();
         return resp;
     }
 

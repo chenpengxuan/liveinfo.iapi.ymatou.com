@@ -26,11 +26,13 @@ public class GetSellerActivityTest extends BaseTest {
     private LiveQueryFacade liveQueryFacade;
 
     @Test
-    public void testGetSellerActivity(){
+    public void testGetSellerActivity() throws InterruptedException {
         Live live = buildLiveBaseInfo();
         liveRepository.insertLive(live);
 
         System.out.println("LiveId:" + live.getActivityId());
+
+        TimeUnit.MILLISECONDS.sleep(100);
 
         Live sellerCurrentLive = liveRepository.getLiveById(live.getActivityId());
         assertNotNull(sellerCurrentLive);

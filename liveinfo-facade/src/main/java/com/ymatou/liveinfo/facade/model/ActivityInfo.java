@@ -119,7 +119,7 @@ public class ActivityInfo extends PrintFriendliness {
      */
     private ActivityStateEnum calcActivityState(){
         if(LiveActionEnum.Available.getCode() == action){
-            Calendar now = Calendar.getInstance();
+            Calendar now = Calendar.getInstance(); //date
             if(Boolean.TRUE.equals(appConfirmed)){
                 Date nowDate = now.getTime();
                 if(nowDate.before(startTime) && endTime.after(startTime)){

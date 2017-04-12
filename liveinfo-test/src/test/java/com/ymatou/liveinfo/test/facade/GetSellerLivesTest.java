@@ -19,6 +19,7 @@ import org.junit.Test;
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by gejianhua on 2017/4/12.
@@ -37,7 +38,7 @@ public class GetSellerLivesTest extends BaseTest {
     private BizConfig bizConfig;
 
     @Test
-    public void testGetSellerLivesSingle() {
+    public void testGetSellerLivesSingle() throws InterruptedException {
         //添加历史直播
         int sellerId = new Random().nextInt(10000000) + 60000000;
         Live live = null;
@@ -52,6 +53,8 @@ public class GetSellerLivesTest extends BaseTest {
             }
             live.setSellerId(sellerId);
             this.liveRepository.insertLive(live);
+            TimeUnit.MILLISECONDS.sleep(100);
+
             System.out.println("live:" + live);
 
             product1 = this.bulidProduct();
@@ -97,7 +100,7 @@ public class GetSellerLivesTest extends BaseTest {
 
 
     @Test
-    public void testGetSellerLivesContainHistory() {
+    public void testGetSellerLivesContainHistory() throws InterruptedException {
         //添加历史直播
         int sellerId = new Random().nextInt(10000000) + 60000000;
         Live live = null;
@@ -112,6 +115,8 @@ public class GetSellerLivesTest extends BaseTest {
             }
             live.setSellerId(sellerId);
             this.liveRepository.insertLive(live);
+            TimeUnit.MILLISECONDS.sleep(100);
+
             System.out.println("live:" + live);
 
             product1 = this.bulidProduct();
