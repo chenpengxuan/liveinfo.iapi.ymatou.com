@@ -32,6 +32,14 @@ public class ProductRepository extends MongoRepository {
     }
 
     /**
+     * 插入
+     * @param product
+     */
+    public void insert(Product product){
+        this.insertEntiy(this.dbName, product);
+    }
+
+    /**
      * 根据商品Id获取商品信息
      * @param productIds
      * @return
@@ -52,6 +60,8 @@ public class ProductRepository extends MongoRepository {
                 .project("_id", false)
                 .asList();
     }
+
+
 }
 
 
