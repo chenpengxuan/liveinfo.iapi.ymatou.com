@@ -74,7 +74,7 @@ public class GetActivityInfoTest extends BaseTest {
 
         Assert.assertEquals(2, resp.getProductList().size());
         Assert.assertEquals(product1.getPictures()[0], resp.getProductList().get(0).getPicUrl());
-        Assert.assertEquals(0, product1.getPrice().compareTo(resp.getProductList().get(0).getPrice()));
+        Assert.assertEquals(0, product1.calcMinPrice().compareTo(resp.getProductList().get(0).getPrice()));
 
         Assert.assertEquals(4, resp.getBrandList().size());
         Assert.assertEquals(2, resp.getBrandList().stream().filter(m -> m.getBrandType() == 1).count());
@@ -126,7 +126,7 @@ public class GetActivityInfoTest extends BaseTest {
 
         Assert.assertEquals(1, resp.getProductList().size());
         Assert.assertEquals(product2.getPictures()[0], resp.getProductList().get(0).getPicUrl());
-        Assert.assertEquals(0, product2.getPrice().compareTo(resp.getProductList().get(0).getPrice()));
+        Assert.assertEquals(0, product2.calcMinPrice().compareTo(resp.getProductList().get(0).getPrice()));
 
         Assert.assertEquals(4, resp.getBrandList().size());
         Assert.assertEquals(2, resp.getBrandList().stream().filter(m -> m.getBrandType() == 1).count());

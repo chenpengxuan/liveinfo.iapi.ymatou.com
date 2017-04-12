@@ -188,12 +188,12 @@ public class LiveService {
             List<Product> products = this.productRepository.getProducts(productIds);
             for (Product product : products) {
                 ProductInfo productInfo = new ProductInfo();
-                productInfo.setNewGuestPrice(product.getPrice());
-                productInfo.setPrice(product.getPrice());
                 productInfo.setProductId(product.getProductId());
                 productInfo.setPsp(product.isPsp());
                 productInfo.setSellStatus(1);
-                productInfo.setVipPrice(product.getPrice());
+                productInfo.setNewGuestPrice(product.calcMinPrice());
+                productInfo.setPrice(product.calcMinPrice());
+                productInfo.setVipPrice(product.calcMinPrice());
                 if (product.getPictures() != null && product.getPictures().length > 0) {
                     productInfo.setPicUrl(product.getPictures()[0]);
                 } else {
