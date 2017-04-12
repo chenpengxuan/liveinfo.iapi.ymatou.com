@@ -5,9 +5,7 @@ import com.ymatou.liveinfo.domain.model.Live;
 import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
 import com.ymatou.liveinfo.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.query.*;
 import org.mongodb.morphia.query.FindOptions;
-import org.mongodb.morphia.query.Meta;
 import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Component;
 
@@ -163,8 +161,8 @@ public class LiveRepository extends MongoRepository {
         List<Live> lives = new ArrayList<>();
         Datastore datastore = getDatastore(dbName);
         Query<Live> query = datastore.find(Live.class).disableValidation()
-                .retrievedFields(true, liveFields)
-                .retrievedFields(false, "_id");
+                .retrievedFields(true, liveFields);
+                //.retrievedFields(false, "_id");
         return query.field("sid").equal(sellerId)
                 .field("action").equal(LiveActionEnum.Available.getCode())
                 .field("end").lessThan(new Date())

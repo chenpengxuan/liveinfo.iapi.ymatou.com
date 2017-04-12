@@ -1,5 +1,6 @@
 package com.ymatou.liveinfo.domain.model;
 
+import com.ymatou.liveinfo.facade.common.PrintFriendliness;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
  * 商品信息
  */
 @Entity(value = "Products", noClassnameStored = true)
-public class Product {
+public class Product extends PrintFriendliness{
     /**
      * 主键
      */

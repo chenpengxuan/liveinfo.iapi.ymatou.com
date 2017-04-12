@@ -1,6 +1,8 @@
 package com.ymatou.liveinfo.test;
 
 import com.ymatou.liveinfo.domain.model.Live;
+import com.ymatou.liveinfo.domain.model.LiveProduct;
+import com.ymatou.liveinfo.domain.model.Product;
 import com.ymatou.liveinfo.domain.repository.LiveRepository;
 import com.ymatou.liveinfo.facade.model.ActivityInfo;
 import org.junit.runner.RunWith;
@@ -8,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -18,7 +21,6 @@ import static org.junit.Assert.assertNotNull;
 
 /**
  * @author wangxudong 2016年7月22日 下午3:40:09
- *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/spring/spring-extra-beans.xml"})
@@ -29,9 +31,10 @@ public class BaseTest {
 
     /**
      * 构建基础的直播信息
+     *
      * @return
      */
-    protected Live buildLiveBaseInfo(){
+    protected Live buildLiveBaseInfo() {
         Calendar startTime = Calendar.getInstance();
         startTime.add(Calendar.HOUR, -1);
 
@@ -41,8 +44,7 @@ public class BaseTest {
         String random = UUID.randomUUID().toString();
 
         int liveId = liveRepository.getMaxLiveId() + 1;
-        if(liveId < 9000000)
-        {
+        if (liveId < 9000000) {
             liveId += 9000000;
         }
 
@@ -69,11 +71,74 @@ public class BaseTest {
     }
 
     /**
+     * 构建直播商品关系
+     *
+     * @return
+     */
+    protected LiveProduct bulidLiveProduct(int randomSeed) {
+        String uuid = UUID.randomUUID().toString();
+        long seed = new Date().getTime() + randomSeed;
+        int rand = new Random(seed).nextInt(1000000) + 7000000;
+
+        Calendar startTime = Calendar.getInstance();
+        startTime.add(Calendar.HOUR, -1);
+
+        Calendar endTime = Calendar.getInstance();
+        endTime.add(Calendar.HOUR, 1);
+
+        int liveId = rand;
+        int brandId = rand - 1;
+        int firstCategoryId = rand + 1;
+        int secondCategoryId = rand + 2;
+        int thirdCategoryId = rand + 3;
+        String productId = uuid;
+        LiveProduct liveProduct = new LiveProduct();
+        liveProduct.setBrandEnName("test-ebrand-" + brandId);
+        liveProduct.setBrandId(brandId);
+        liveProduct.setBrandName("test-brand-" + brandId);
+        liveProduct.setEndTime(endTime.getTime());
+        liveProduct.setFirstCategoryId(firstCategoryId);
+        liveProduct.setFirstCategoryName("test-firstcatname-" + firstCategoryId);
+        liveProduct.setLiveId(liveId);
+        liveProduct.setProductId(productId);
+        liveProduct.setSecondCategoryId(secondCategoryId);
+        liveProduct.setSecondCategoryName("test-secondcatname-" + secondCategoryId);
+        liveProduct.setSellStatus(1);
+        liveProduct.setSort(new Double(String.valueOf(rand)));
+        liveProduct.setStartTime(startTime.getTime());
+        liveProduct.setThirdCategoryId(thirdCategoryId);
+        liveProduct.setThirdCategoryName("test-thirdcatname-" + thirdCategoryId);
+
+        return liveProduct;
+    }
+
+
+    /**
+     * 构建商品信息
+     * @return
+     */
+    protected Product bulidProduct() {
+        String uuid = UUID.randomUUID().toString();
+
+        String pic1 = "http://pic.ymatou.com/pic1";
+        String pic2 = "http://pic.ymatou.com/pic2";
+        String pic3 = "http://pic.ymatou.com/pic3";
+
+        Product product = new Product();
+        product.setPictures(new String[]{pic1, pic2, pic3});
+        product.setPrice(new BigDecimal("100.90"));
+        product.setProductId(uuid);
+        product.setPsp(true);
+        return product;
+    }
+
+    /**
      * 验证基本的信息
+     *
      * @param live
      * @param activityInfo
      */
-    protected void assertActivityInfo(Live live, ActivityInfo activityInfo){
+    protected void assertActivityInfo(Live live, ActivityInfo activityInfo) {
         assertNotNull(activityInfo);
         assertEquals(live.getActivityId(), activityInfo.getActivityId());
         assertEquals(live.getTitle(), activityInfo.getTitle());
@@ -98,7 +163,7 @@ public class BaseTest {
      * @param diffValue
      * @return
      */
-    protected Date getDateFormNow(int diffField, int diffValue){
+    protected Date getDateFormNow(int diffField, int diffValue) {
         Calendar now = Calendar.getInstance();
         now.add(diffField, diffValue);
         return now.getTime();

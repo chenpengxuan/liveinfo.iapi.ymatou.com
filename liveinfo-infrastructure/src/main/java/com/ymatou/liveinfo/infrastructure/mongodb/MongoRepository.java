@@ -32,6 +32,10 @@ public abstract class MongoRepository {
 
     Morphia morphia = new Morphia();
 
+    protected MongoRepository(){
+        this.morphia.getMapper().getConverters().addConverter(BigDecimalConverter.class);
+    }
+
     /**
      * 获取到MongoClient
      * 

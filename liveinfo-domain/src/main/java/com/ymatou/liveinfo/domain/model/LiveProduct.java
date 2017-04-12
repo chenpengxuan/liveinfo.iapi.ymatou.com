@@ -6,6 +6,8 @@ import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Property;
 
+import java.util.Date;
+
 /**
  * Created by gejianhua on 2017/4/7.
  * 直播活动商品关系信息，冗余了一部分商品信息
@@ -83,6 +85,30 @@ public class LiveProduct extends PrintFriendliness {
      */
     @Property("tcatname")
     private String thirdCategoryName;
+
+    /**
+     * 在售状态
+     */
+    @Property("status")
+    private int sellStatus;
+
+    /**
+     * 开始时间
+     */
+    @Property("start")
+    private Date startTime;
+
+    /**
+     * 结束时间
+     */
+    @Property("end")
+    private Date endTime;
+
+    /**
+     * 排序
+     */
+    @Property("sort")
+    private double sort;
 
 
     public ObjectId getId() {
@@ -179,6 +205,38 @@ public class LiveProduct extends PrintFriendliness {
 
     public void setThirdCategoryName(String thirdCategoryName) {
         this.thirdCategoryName = thirdCategoryName;
+    }
+
+    public int getSellStatus() {
+        return sellStatus;
+    }
+
+    public void setSellStatus(int sellStatus) {
+        this.sellStatus = sellStatus;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public double getSort() {
+        return sort;
+    }
+
+    public void setSort(double sort) {
+        this.sort = sort;
     }
 }
 

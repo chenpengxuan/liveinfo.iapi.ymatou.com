@@ -38,6 +38,14 @@ public class LiveProductRepository extends MongoRepository {
     }
 
     /**
+     * 插入
+     * @param liveProduct
+     */
+    public void insert(LiveProduct liveProduct){
+        this.insertEntiy(this.dbName, liveProduct);
+    }
+
+    /**
      * 查询直播商品Id
      * @param liveId
      * @param limit
