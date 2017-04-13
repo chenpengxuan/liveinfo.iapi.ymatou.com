@@ -30,7 +30,19 @@ public class BizConfig {
      */
     private int historyLiveQuantity;
 
+    /**
+     * 允许输出返回日志
+     */
+    private boolean enableRespLog;
 
+    @DisconfFileItem(name = "enableRespLog")
+    public boolean isEnableRespLog() {
+        return enableRespLog;
+    }
+
+    public void setEnableRespLog(boolean enableRespLog) {
+        this.enableRespLog = enableRespLog;
+    }
 
     @DisconfFileItem(name = "cache.live.maxsize")
     public int getCacheLiveMaxsize() {

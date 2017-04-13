@@ -33,7 +33,7 @@ public class SystemFacadeImpl implements  SystemFacade{
     public String version() {
         return "{"
                 + "\"ip\":\"" + NetUtil.getHostIp() + "\","
-                + "\"1.0.1\":\"2017-04-12.01 first deploy.\""
+                + "\"1.0.1\":\"2017-04-13.01 first deploy.\""
                 + "}";
     }
 

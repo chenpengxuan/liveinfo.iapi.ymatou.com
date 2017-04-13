@@ -5,8 +5,10 @@ import com.ymatou.liveinfo.facade.common.PrintFriendliness;
 import com.ymatou.liveinfo.facade.enums.ActivityStateEnum;
 import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 直播信息，对应的数据库实体为Live
@@ -112,6 +114,18 @@ public class ActivityInfo extends PrintFriendliness {
     public String getActivityInfo(){
         return activityContent;
     }
+
+    /**
+     * 物流方式 已经废弃
+     */
+    @JsonProperty("DeliverType")
+    private int deliverType;
+
+    /**
+     * 品牌列表 已经废弃
+     */
+    @JsonProperty("Brands")
+    private List<String> brands = new ArrayList<>();
 
     /**
      * 计算直播状态枚举
@@ -280,5 +294,21 @@ public class ActivityInfo extends PrintFriendliness {
 
     public void setAppConfirmed(Boolean appConfirmed) {
         this.appConfirmed = appConfirmed;
+    }
+
+    public int getDeliverType() {
+        return deliverType;
+    }
+
+    public void setDeliverType(int deliverType) {
+        this.deliverType = deliverType;
+    }
+
+    public List<String> getBrands() {
+        return brands;
+    }
+
+    public void setBrands(List<String> brands) {
+        this.brands = brands;
     }
 }

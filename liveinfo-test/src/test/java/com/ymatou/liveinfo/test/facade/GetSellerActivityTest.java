@@ -31,6 +31,7 @@ public class GetSellerActivityTest extends BaseTest {
         liveRepository.insertLive(live);
 
         System.out.println("LiveId:" + live.getActivityId());
+        System.out.println("SellerId:" + live.getSellerId());
 
         TimeUnit.MILLISECONDS.sleep(100);
 

@@ -1,6 +1,7 @@
 package com.ymatou.liveinfo.facade.impl;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
+import com.ymatou.liveinfo.domain.config.BizConfig;
 import com.ymatou.liveinfo.facade.common.BaseRequest;
 import com.ymatou.liveinfo.facade.common.BaseResponse;
 import com.ymatou.liveinfo.facade.common.BizException;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.UUID;
 
 /**
@@ -28,6 +30,9 @@ import java.util.UUID;
 public class FacadeAspect {
 
     private static final Logger DEFAULT_LOGGER = LoggerFactory.getLogger(FacadeAspect.class);
+
+    @Resource
+    private BizConfig bizConfig;
 
     @Pointcut("execution(* com.ymatou.liveinfo.facade.*Facade.*(*)) && args(req)")
     public void executAccountFacade(BaseRequest req) {};
@@ -67,6 +72,10 @@ public class FacadeAspect {
             resp = builErrorResponse(joinPoint, ResponseCode.UNKNOWN, e.getLocalizedMessage());
             logger.error(String.format("Unknown error in executing request:%s", req.toString()), e);
         } finally {
+            if(bizConfig.isEnableRespLog()) {
+                logger.info("Resp:" + resp);
+            }
+
             long consumedTime = System.currentTimeMillis() - startTime;
             logger.info("Finished {}, Consumed:{}ms", getRequestFlag(req), consumedTime);
             MDC.clear();
