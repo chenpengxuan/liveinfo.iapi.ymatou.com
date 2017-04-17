@@ -3,6 +3,7 @@ package com.ymatou.liveinfo.facade.impl;
 
 import com.ymatou.liveinfo.domain.service.LiveService;
 import com.ymatou.liveinfo.facade.LiveQueryFacade;
+import com.ymatou.liveinfo.facade.common.BaseRequest;
 import com.ymatou.liveinfo.facade.common.BaseResponse;
 import com.ymatou.liveinfo.facade.model.*;
 import org.springframework.stereotype.Component;
@@ -88,7 +89,7 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
     @Path("/{Activity:(?i:Activity)}/{ListInProgressActivitiesByIds:(?i:ListInProgressActivitiesByIds)}")
     public BaseResponse listInProgressActivitiesByIds(ListInProgressActivitiesByIdsReq req) {
         BaseResponse response = new BaseResponse();
-        List<ActivityInfo> activityInfos = liveService.getInProgressActivitiesByIds(req.getActivityIds());
+        List<ActivityComplexInfo> activityInfos = liveService.getInProgressActivitiesByIds(req.getActivityIds(), req.getProductNum());
 
         ListInProgressActivitiesByIdsRespData  respData = new ListInProgressActivitiesByIdsRespData();
         respData.setActivities(activityInfos);
@@ -111,6 +112,28 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
         respData.setProductIdList(prodIds);
         response.setData(respData);
 
+        return response;
+    }
+
+    @Override
+    @GET
+    @Path("/{Activity:(?i:Activity)}/{GetActivityById:(?i:GetActivityById)}")
+    public BaseResponse getActivityById(@BeanParam GetActivityByIdReq req) {
+        BaseResponse response = new BaseResponse();
+
+        ActivityInfo activityInfo = liveService.getActivityById(req.getActivityId());
+        response.setData(activityInfo);
+        return response;
+    }
+
+    @Override
+    @GET
+    @Path("/{Activity:(?i:Activity)}/{GetSellerLatestLive:(?i:GetSellerLatestLive)}")
+    public BaseResponse getSellerLatestLive(@BeanParam GetSellerLatestLiveReq req) {
+        BaseResponse response = new BaseResponse();
+
+        ActivityInfo activityInfo = liveService.getSellerLatestLive(req.getSellerId());
+        response.setData(activityInfo);
         return response;
     }
 }

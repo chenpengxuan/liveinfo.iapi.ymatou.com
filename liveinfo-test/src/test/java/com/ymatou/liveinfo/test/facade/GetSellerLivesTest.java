@@ -164,7 +164,7 @@ public class GetSellerLivesTest extends BaseTest {
 
 
     @Test
-    public void testGetSellerLivesNotExistsInProgress() {
+    public void testGetSellerLivesNotExistsInProgress() throws InterruptedException {
         //添加历史直播
         int sellerId = new Random().nextInt(10000000) + 60000000;
         Live live = null;
@@ -178,6 +178,8 @@ public class GetSellerLivesTest extends BaseTest {
             live.setSellerId(sellerId);
             this.liveRepository.insertLive(live);
             System.out.println("live:" + live);
+
+            TimeUnit.MILLISECONDS.sleep(200);
 
             product1 = this.bulidProduct();
             this.productRepository.insert(product1);

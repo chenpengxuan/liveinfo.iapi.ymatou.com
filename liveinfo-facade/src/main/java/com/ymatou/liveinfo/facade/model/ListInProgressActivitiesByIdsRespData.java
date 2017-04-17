@@ -20,7 +20,7 @@ public class ListInProgressActivitiesByIdsRespData extends PrintFriendliness {
      * 直播信息列表
      */
     @JsonProperty("Activities")
-    private List<ActivityInfo> activities;
+    private List<ActivityComplexInfo> activities;
 
     public int getActivityCount() {
         return activityCount;
@@ -30,11 +30,11 @@ public class ListInProgressActivitiesByIdsRespData extends PrintFriendliness {
         this.activityCount = activityCount;
     }
 
-    public List<ActivityInfo> getActivities() {
+    public List<ActivityComplexInfo> getActivities() {
         return activities;
     }
 
-    public void setActivities(List<ActivityInfo> activities) {
+    public void setActivities(List<ActivityComplexInfo> activities) {
         this.activities = activities;
     }
 }

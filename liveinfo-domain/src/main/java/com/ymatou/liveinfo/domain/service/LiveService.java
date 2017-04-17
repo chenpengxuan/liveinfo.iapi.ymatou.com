@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -255,14 +256,15 @@ public class LiveService {
      * 根据卖家id列表获取正在进行中直播列表
      *
      * @param liveIds
+     * @param prodNum 商品数量
      * @return
      */
-    public List<ActivityInfo> getInProgressActivitiesByIds(List<Integer> liveIds){
-        List<ActivityInfo> activityInfos = new ArrayList<>();
+    public List<ActivityComplexInfo> getInProgressActivitiesByIds(List<Integer> liveIds, int prodNum){
+        List<ActivityComplexInfo> activityInfos = new ArrayList<>();
         List<Live> liveList = liveRepository.getInProgressLivesByIds(liveIds);
         if(liveList != null || liveList.size() > 0){
             for (Live live: liveList) {
-                ActivityInfo activityInfo = new ActivityInfo();
+                ActivityComplexInfo activityInfo = new ActivityComplexInfo();
                 try {
                     BeanUtils.copyProperties(activityInfo, live);
                     activityInfos.add(activityInfo);
@@ -270,6 +272,16 @@ public class LiveService {
                     throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
                 }
             }
+        }
+
+        if(activityInfos.size() == 0 || prodNum < 1)
+        {
+            return activityInfos;
+        }
+
+        for (ActivityComplexInfo activityComplexInfo : activityInfos){
+            List<ProductInfo> productInfos = getProductInfoesOfLive(activityComplexInfo.getActivityId(), prodNum);
+            activityComplexInfo.setProductList(productInfos);
         }
         return activityInfos;
     }
@@ -298,22 +310,110 @@ public class LiveService {
 
         switch (searchTypeEnum) {
             case All:
+                prodIds = liveProducts.stream().map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
                 break;
             case BrandName:
-                return liveProducts.stream().filter(liveProduct -> {
-                    return !StringUtils.isBlank(req.getBrandIdList()) && req.getBrandIdList().contains(liveProduct.getBrandName());
+                prodIds = liveProducts.stream().filter(liveProduct -> {
+                    return !StringUtils.isBlank(liveProduct.getBrandName())
+                            && liveProduct.getBrandName().equalsIgnoreCase(req.getKeyword());
                 }).map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
+                break;
             case CategoryName:
+                prodIds = liveProducts.stream().filter(liveProduct -> {
+                    return !StringUtils.isBlank(liveProduct.getThirdCategoryName())
+                            && liveProduct.getThirdCategoryName().equalsIgnoreCase(req.getKeyword());
+                }).map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
                 break;
             case BrandIdAndCategoryId:
+                prodIds = filterLiveProductByBrandIdOrCategoryId(req.getBrandIdList(), req.getThirdCategoryIdList(), liveProducts);
                 break;
         }
-
         return prodIds;
     }
 
     /**
-     * 获取买手当前的直播信息
+     * 根据品牌Id和品类Id列表进行过滤
+     * @param brandIdList
+     * @param categoryIdList
+     * @param liveProducts
+     * @return
+     */
+    private List<String> filterLiveProductByBrandIdOrCategoryId(String brandIdList, String categoryIdList, List<LiveProduct> liveProducts){
+        String[] brandIds = StringUtils.isBlank(brandIdList) ? new String[0]: brandIdList.split(",");
+        String[] categoryIds = StringUtils.isBlank(categoryIdList) ? new String[0]: categoryIdList.split(",");
+
+        if(brandIds.length > 0 && categoryIds.length > 0) {
+            return liveProducts.stream().filter(liveProduct -> {
+                return Arrays.stream(brandIds).anyMatch(x -> x.equals(String.valueOf(liveProduct.getBrandId()))) &&
+                        Arrays.stream(categoryIds).anyMatch(x -> x.equals(String.valueOf(liveProduct.getThirdCategoryId()))
+                                || x.equals(String.valueOf(liveProduct.getSecondCategoryId())));
+
+            }).map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
+
+        }else if(brandIds.length > 0){
+            return liveProducts.stream().filter(liveProduct -> {
+                return Arrays.stream(brandIds).anyMatch(x -> x.equals(String.valueOf(liveProduct.getBrandId())));
+
+            }).map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
+
+        }else if(categoryIds.length > 0){
+            return liveProducts.stream().filter(liveProduct -> {
+                return Arrays.stream(categoryIds).anyMatch(x -> x.equals(String.valueOf(liveProduct.getThirdCategoryId()))
+                        || x.equals(String.valueOf(liveProduct.getSecondCategoryId())));
+
+            }).map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
+
+        }else{
+            return liveProducts.stream().map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * 根据直播Id获取到直播信息
+     * @param activityId
+     * @return
+     */
+    public ActivityInfo getActivityById(int activityId) {
+        Live live = liveRepository.getAvaiableLiveById(activityId);
+        if(live == null){
+            return  null;
+        }
+
+        ActivityInfo activityInfo = new ActivityInfo();
+        try {
+            BeanUtils.copyProperties(activityInfo, live);
+            return activityInfo;
+        } catch (Exception e) {
+            throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
+        }
+    }
+
+    /**
+     * 获取买手最近的直播（没有当前就取历史）
+     * @param sellerId
+     * @return
+     */
+    public ActivityInfo getSellerLatestLive(int sellerId) {
+        Live live = liveRepository.getSellerCurrentLive(sellerId);
+        if(live == null){
+            live = liveRepository.getSellerLatestHistoryLive(sellerId);
+        }
+
+        if(live == null){
+            return null;
+        }
+
+        ActivityInfo activityInfo = new ActivityInfo();
+        try {
+            BeanUtils.copyProperties(activityInfo, live);
+            return activityInfo;
+        } catch (Exception e) {
+            throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
+        }
+    }
+
+    /**
+     * 获取买手当前的直播信息_缓存优化版本_暂时为使用
      *
      * @param sellerId
      * @return
