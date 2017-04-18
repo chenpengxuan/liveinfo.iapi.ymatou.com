@@ -8,6 +8,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.aggregation.Group;
 import org.mongodb.morphia.aggregation.Projection;
 import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -86,7 +87,7 @@ public class LiveProductRepository extends MongoRepository {
                 .field("status").equal(1)
                 .field("start").lessThanOrEq(now)
                 .field("end").greaterThanOrEq(now)
-                .order("sort")
+                .order(Sort.ascending("sort"), Sort.descending("add"))
                 .retrievedFields(true, liveProductFields);
 
         List<LiveProduct> liveProductList = query.asList();

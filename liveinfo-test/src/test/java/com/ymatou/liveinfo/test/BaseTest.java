@@ -94,6 +94,7 @@ public class BaseTest {
         int thirdCategoryId = rand + 3;
         String productId = uuid;
         LiveProduct liveProduct = new LiveProduct();
+        liveProduct.setAddTime(Calendar.getInstance().getTime());
         liveProduct.setBrandEnName("test-ebrand-" + brandId);
         liveProduct.setBrandId(brandId);
         liveProduct.setBrandName("test-brand-" + brandId);

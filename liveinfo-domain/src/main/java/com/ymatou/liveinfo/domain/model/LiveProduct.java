@@ -110,6 +110,9 @@ public class LiveProduct extends PrintFriendliness {
     @Property("sort")
     private double sort;
 
+    @Property("add")
+    private Date addTime;
+
 
     public ObjectId getId() {
         return id;
@@ -237,6 +240,14 @@ public class LiveProduct extends PrintFriendliness {
 
     public void setSort(double sort) {
         this.sort = sort;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 }
 

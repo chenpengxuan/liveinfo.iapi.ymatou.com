@@ -65,4 +65,18 @@ public interface LiveQueryFacade {
      * @return
      */
     BaseResponse searchActivity(@BeanParam SearchActivityReq req);
+
+    /**
+     * 根据直播Id获取直播信息
+     * @param req
+     * @return
+     */
+    BaseResponse getActivityById(GetActivityByIdReq req);
+
+    /**
+     * 获取买手最近的直播（没有当前就取历史）
+     * @param req
+     * @return
+     */
+    BaseResponse getSellerLatestLive(GetSellerLatestLiveReq req);
 }

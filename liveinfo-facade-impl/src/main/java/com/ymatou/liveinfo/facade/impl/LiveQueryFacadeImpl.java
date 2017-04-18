@@ -3,6 +3,7 @@ package com.ymatou.liveinfo.facade.impl;
 
 import com.ymatou.liveinfo.domain.service.LiveService;
 import com.ymatou.liveinfo.facade.LiveQueryFacade;
+import com.ymatou.liveinfo.facade.common.BaseRequest;
 import com.ymatou.liveinfo.facade.common.BaseResponse;
 import com.ymatou.liveinfo.facade.model.*;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
     @Override
     @GET
     @Path("/{Activity:(?i:Activity)}/{GetActivityInfo:(?i:GetActivityInfo)}")
-    public BaseResponse getActivityInfo(@BeanParam GetActivityInfoReq req){
+    public BaseResponse getActivityInfo(@BeanParam GetActivityInfoReq req) {
         GetActivityInfoResp resp = this.liveService.getActivityInfo(req);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setData(resp);
@@ -58,7 +59,7 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
         BaseResponse response = new BaseResponse();
         List<ActivityInfo> activityInfos = liveService.getSellerCurrentActivityList(req.getSellerIds());
 
-        ListInProgressActivitiesBySellerIdsRespData  respData = new ListInProgressActivitiesBySellerIdsRespData();
+        ListInProgressActivitiesBySellerIdsRespData respData = new ListInProgressActivitiesBySellerIdsRespData();
         respData.setActivities(activityInfos);
         respData.setActivityCount(activityInfos.size());
 
@@ -75,7 +76,7 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
         List<GetActivityIdsBySellerIdsRespData.SellerAcitvityId> sellerAcitvityIds
                 = liveService.getSellerCurrentActivityIdList(req.getSellerIds());
 
-        GetActivityIdsBySellerIdsRespData  respData = new GetActivityIdsBySellerIdsRespData();
+        GetActivityIdsBySellerIdsRespData respData = new GetActivityIdsBySellerIdsRespData();
         respData.setActivityIds(sellerAcitvityIds);
 
         response.setData(respData);
@@ -88,9 +89,9 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
     @Path("/{Activity:(?i:Activity)}/{ListInProgressActivitiesByIds:(?i:ListInProgressActivitiesByIds)}")
     public BaseResponse listInProgressActivitiesByIds(ListInProgressActivitiesByIdsReq req) {
         BaseResponse response = new BaseResponse();
-        List<ActivityInfo> activityInfos = liveService.getInProgressActivitiesByIds(req.getActivityIds());
+        List<ActivityComplexInfo> activityInfos = liveService.getInProgressActivitiesByIds(req.getActivityIds(), req.getProductNum());
 
-        ListInProgressActivitiesByIdsRespData  respData = new ListInProgressActivitiesByIdsRespData();
+        ListInProgressActivitiesByIdsRespData respData = new ListInProgressActivitiesByIdsRespData();
         respData.setActivities(activityInfos);
         respData.setActivityCount(activityInfos.size());
 
@@ -122,5 +123,27 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setData(resp);
         return baseResponse;
+    }
+
+    @Override
+    @GET
+    @Path("/{Activity:(?i:Activity)}/{GetActivityById:(?i:GetActivityById)}")
+    public BaseResponse getActivityById(@BeanParam GetActivityByIdReq req) {
+        BaseResponse response = new BaseResponse();
+
+        ActivityInfo activityInfo = liveService.getActivityById(req.getActivityId());
+        response.setData(activityInfo);
+        return response;
+    }
+
+    @Override
+    @GET
+    @Path("/{Activity:(?i:Activity)}/{GetSellerLatestLive:(?i:GetSellerLatestLive)}")
+    public BaseResponse getSellerLatestLive(@BeanParam GetSellerLatestLiveReq req) {
+        BaseResponse response = new BaseResponse();
+
+        ActivityInfo activityInfo = liveService.getSellerLatestLive(req.getSellerId());
+        response.setData(activityInfo);
+        return response;
     }
 }

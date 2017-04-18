@@ -38,6 +38,8 @@ public class ListInProgressActivitiesBySellerIdsTest extends BaseTest {
         Live live2 = buildLiveBaseInfo();
         liveRepository.insertLive(live2);
 
+        TimeUnit.MILLISECONDS.sleep(100);
+
         System.out.println("LiveId1:" + live1.getActivityId());
         System.out.println("LiveId2:" + live2.getActivityId());
         System.out.println("SellerId1:" + live1.getSellerId());

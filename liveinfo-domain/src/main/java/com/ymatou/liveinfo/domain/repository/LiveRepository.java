@@ -7,6 +7,7 @@ import com.ymatou.liveinfo.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,7 +30,7 @@ public class LiveRepository extends MongoRepository {
     private final String[] liveFields = "lid,sid,confirm,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action"
             .split(",");
 
-    private final FindOptions findOptionsLimitOne = new FindOptions().limit(1);
+    private final FindOptions limitOne = new FindOptions().limit(1);
 
     /**
      * 获取到MongoClient
@@ -58,7 +59,25 @@ public class LiveRepository extends MongoRepository {
                 query.criteria("confirm").equal(true),
                 query.criteria("action").equal(LiveActionEnum.Available.getCode())
         );
-        return query.retrievedFields(true, liveFields).disableValidation().order("-lid").get(findOptionsLimitOne);
+        return query.retrievedFields(true, liveFields).disableValidation().order("-lid").get(limitOne);
+    }
+
+    /**
+     * 获取卖家最近的历史直播
+     * @param sellerId
+     * @return
+     */
+    public Live getSellerLatestHistoryLive(int sellerId){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class);
+        Date now = Calendar.getInstance().getTime();
+        query.and(
+                query.criteria("sid").equal(sellerId),
+                query.criteria("end").lessThan(now),
+                query.criteria("confirm").equal(true),
+                query.criteria("action").equal(LiveActionEnum.Available.getCode())
+        );
+        return query.retrievedFields(true, liveFields).disableValidation().order(Sort.descending("end")).get(limitOne);
     }
 
     /**
@@ -125,7 +144,21 @@ public class LiveRepository extends MongoRepository {
         Query<Live> query = datastore.find(Live.class);
         query.field("lid").equal(liveId);
 
-        return query.retrievedFields(true, liveFields).disableValidation().get(findOptionsLimitOne);
+        return query.retrievedFields(true, liveFields).disableValidation().get(limitOne);
+    }
+
+    /**
+     * 根据直播Id查询直播信息
+     * @param liveId
+     * @return
+     */
+    public Live getAvaiableLiveById(int liveId){
+        Datastore datastore = getDatastore(dbName);
+        Query<Live> query = datastore.find(Live.class)
+                .field("lid").equal(liveId)
+                .field("action").equal(LiveActionEnum.Available.getCode()) // 直播状态：可用
+                .order(Sort.descending("lid"));
+        return query.retrievedFields(true, liveFields).disableValidation().get(limitOne);
     }
 
     /**

@@ -19,7 +19,7 @@ public class ListInProgressActivitiesByIdsReq extends BaseRequest {
     /**
      * 商品数量
      */
-    private Integer productNum;
+    private int productNum;
 
     public List<Integer> getActivityIds() {
         return activityIds;
@@ -29,11 +29,11 @@ public class ListInProgressActivitiesByIdsReq extends BaseRequest {
         this.activityIds = activityIds;
     }
 
-    public Integer getProductNum() {
+    public int getProductNum() {
         return productNum;
     }
 
-    public void setProductNum(Integer productNum) {
+    public void setProductNum(int productNum) {
         this.productNum = productNum;
     }
 }
