@@ -3,6 +3,8 @@ package com.ymatou.liveinfo.facade;
 import com.ymatou.liveinfo.facade.common.BaseResponse;
 import com.ymatou.liveinfo.facade.model.*;
 
+import javax.ws.rs.BeanParam;
+
 /**
  * 直播查询API
  * Created by wangxudong on 2017/3/31.
@@ -56,4 +58,11 @@ public interface LiveQueryFacade {
      * @return
      */
     BaseResponse getProductListByLiveId(GetProductListByLiveIdReq req);
+
+    /**
+     * 运营后台查询直播
+     * @param req
+     * @return
+     */
+    BaseResponse searchActivity(@BeanParam SearchActivityReq req);
 }

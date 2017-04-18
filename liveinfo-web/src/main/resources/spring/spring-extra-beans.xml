@@ -35,6 +35,7 @@
 			<list>
 				<value>app.properties</value>
 				<value>mongodb.properties</value>
+				<value>sqlserver.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -82,6 +83,7 @@
 	</aop:config>
 
 	<import resource="classpath:spring/persistence.xml" />
+	<import resource="classpath:spring/sqlserver-persistence.xml" />
 
 	<!-- 提供方应用信息，用于计算依赖关系 -->
 	<dubbo:application name="${appId}" />

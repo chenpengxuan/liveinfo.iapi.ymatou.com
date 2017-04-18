@@ -12,9 +12,12 @@ import com.ymatou.liveinfo.domain.repository.LiveProductRepository;
 
 import com.ymatou.liveinfo.domain.repository.LiveRepository;
 import com.ymatou.liveinfo.domain.repository.ProductRepository;
+import com.ymatou.liveinfo.domain.repository.sqlserver.CountrySqlRepository;
+import com.ymatou.liveinfo.domain.repository.sqlserver.LiveSqlRepository;
 import com.ymatou.liveinfo.domain.utils.MappingUtils;
 import com.ymatou.liveinfo.facade.common.BizException;
 
+import com.ymatou.liveinfo.facade.enums.ActivityStateEnum;
 import com.ymatou.liveinfo.facade.enums.LiveActionEnum;
 import com.ymatou.liveinfo.facade.enums.ProductInLiveSearchTypeEnum;
 import com.ymatou.liveinfo.facade.model.*;
@@ -22,8 +25,11 @@ import com.ymatou.liveinfo.facade.model.*;
 import com.ymatou.liveinfo.facade.model.ActivityInfo;
 import com.ymatou.liveinfo.facade.model.GetActivityIdsBySellerIdsRespData;
 import com.ymatou.liveinfo.facade.model.GetProductListByLiveIdReq;
+import com.ymatou.liveinfo.infrastructure.db.model.ActivityPo;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -49,6 +55,10 @@ public class LiveService {
     private LiveProductRepository liveProductRepository;
     @Resource
     private ProductRepository productRepository;
+    @Resource
+    private LiveSqlRepository liveSqlRepository;
+    @Resource
+    private CountrySqlRepository countrySqlRepository;
 
     @Resource
     private CacheFactory cacheFactory;
@@ -334,6 +344,40 @@ public class LiveService {
         } catch (ExecutionException e) {
             throw new BizException("get activeinfo from cache faild,with sellerId:" + sellerId, e);
         }
+    }
+
+    /**
+     * 运营后台查询直播
+     * @param req
+     * @return
+     */
+    public SearchActivityResp searchActivity(SearchActivityReq req){
+        if(req.getPageIndex() <= 0){
+            req.setPageIndex(1);
+        }
+        if(req.getPageSize() <= 0){
+            req.setPageSize(20);
+        }
+        if(req.getActivityState() == ActivityStateEnum.End.getCode()){
+            req.setSortField("dEndTime");
+            req.setSortType("desc");
+        }
+
+        DateTime dateTime = DateTime.now();
+        dateTime = dateTime.plusHours(1);
+        req.setWillEndTime(dateTime.toDate());
+
+        if(req.getAreaId() > 0 && req.getCountryId() <= -1){
+            List<Integer> countryIds = this.countrySqlRepository.getCountryIds(req.getAreaId());
+            req.setCountryIds(countryIds);
+        }
+
+        ImmutablePair<Integer, List<ActivityPo>> result = this.liveSqlRepository.searchActivity(req);
+        SearchActivityResp resp = new SearchActivityResp();
+        resp.setTotalRecords(result.getLeft());
+        resp.setActivityList(MappingUtils.toActivityInfos(result.getRight()));
+
+        return resp;
     }
 }
 

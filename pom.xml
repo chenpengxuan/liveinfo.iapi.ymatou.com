@@ -17,7 +17,8 @@
         <module>liveinfo-infrastructure</module>
         <module>liveinfo-domain</module>
         <module>liveinfo-test</module>
-    </modules>
+		<module>liveinfo-mybatis-generator</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -113,4 +113,14 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
 
         return response;
     }
+
+    @Override
+    @GET
+    @Path("/{Activity:(?i:Activity)}/{SearchActivity:(?i:SearchActivity)}")
+    public BaseResponse searchActivity(@BeanParam SearchActivityReq req) {
+        SearchActivityResp resp = this.liveService.searchActivity(req);
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.setData(resp);
+        return baseResponse;
+    }
 }
