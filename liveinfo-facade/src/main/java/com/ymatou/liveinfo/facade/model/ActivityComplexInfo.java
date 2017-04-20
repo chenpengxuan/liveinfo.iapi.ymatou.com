@@ -2,6 +2,7 @@ package com.ymatou.liveinfo.facade.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
 public class ActivityComplexInfo extends ActivityInfo {
 
     @JsonProperty("ProductList")
-    private List<ProductInfo> productList;
+    private List<ProductInfo> productList = new ArrayList<>();
 
     public List<ProductInfo> getProductList() {
         return productList;

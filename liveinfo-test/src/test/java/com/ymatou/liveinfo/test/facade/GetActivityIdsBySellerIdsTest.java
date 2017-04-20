@@ -11,6 +11,7 @@ import org.junit.Test;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,9 +24,11 @@ public class GetActivityIdsBySellerIdsTest extends BaseTest {
     private LiveQueryFacade liveQueryFacade;
 
     @Test
-    public void testGetActivityIdsBySellerIds(){
+    public void testGetActivityIdsBySellerIds() throws InterruptedException {
         Live live1 = buildLiveBaseInfo();
         liveRepository.insertLive(live1);
+
+        TimeUnit.MILLISECONDS.sleep(200);
 
         Live live2 = buildLiveBaseInfo();
         liveRepository.insertLive(live2);
