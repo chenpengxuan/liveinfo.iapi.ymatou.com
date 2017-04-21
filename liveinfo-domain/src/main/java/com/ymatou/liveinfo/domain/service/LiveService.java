@@ -197,7 +197,13 @@ public class LiveService {
         List<String> productIds = this.liveProductRepository.getProductIdsByLive(liveId, limit);
         if (productIds.size() > 0) {
             List<Product> products = this.productRepository.getProducts(productIds);
-            for (Product product : products) {
+            for (String productId : productIds) {
+                Optional<Product> productOptional = products.stream().filter(x -> productId.equals(x.getProductId())).findFirst();
+                if(productOptional == null || !productOptional.isPresent())
+                {
+                    continue;
+                }
+                Product product = productOptional.get();
                 ProductInfo productInfo = new ProductInfo();
                 productInfo.setProductId(product.getProductId());
                 productInfo.setPsp(product.isPsp());
