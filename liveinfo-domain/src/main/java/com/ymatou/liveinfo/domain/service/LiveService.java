@@ -194,7 +194,7 @@ public class LiveService {
     private List<ProductInfo> getProductInfoesOfLive(int liveId, int limit){
         List<ProductInfo> productInfos = new ArrayList<>();
 
-        List<String> productIds = this.liveProductRepository.getProductIdsByLive(liveId, 10);
+        List<String> productIds = this.liveProductRepository.getProductIdsByLive(liveId, limit);
         if (productIds.size() > 0) {
             List<Product> products = this.productRepository.getProducts(productIds);
             for (Product product : products) {
@@ -266,10 +266,10 @@ public class LiveService {
      * 根据卖家id列表获取正在进行中直播列表
      *
      * @param liveIds
-     * @param prodNum 商品数量
+     * @param prodMaxNum 商品数量
      * @return
      */
-    public List<ActivityComplexInfo> getInProgressActivitiesByIds(List<Integer> liveIds, int prodNum){
+    public List<ActivityComplexInfo> getInProgressActivitiesByIds(List<Integer> liveIds, int prodMaxNum){
         List<ActivityComplexInfo> activityInfos = new ArrayList<>();
         List<Live> liveList = liveRepository.getInProgressLivesByIds(liveIds);
         if(liveList != null || liveList.size() > 0){
@@ -284,13 +284,13 @@ public class LiveService {
             }
         }
 
-        if(activityInfos.size() == 0 || prodNum < 1)
+        if(activityInfos.size() == 0 || prodMaxNum < 1)
         {
             return activityInfos;
         }
 
         for (ActivityComplexInfo activityComplexInfo : activityInfos){
-            List<ProductInfo> productInfos = getProductInfoesOfLive(activityComplexInfo.getActivityId(), prodNum);
+            List<ProductInfo> productInfos = getProductInfoesOfLive(activityComplexInfo.getActivityId(), prodMaxNum);
             activityComplexInfo.setProductList(productInfos);
         }
         return activityInfos;
