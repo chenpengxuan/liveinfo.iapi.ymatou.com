@@ -45,14 +45,14 @@ public class LiveQueryFacadeImpl implements LiveQueryFacade {
     @Override
     @GET
     @Path("/{Activity:(?i:Activity)}/{SellerActivity:(?i:SellerActivity)}")
-    public BaseResponse getSellerLives(GetSellerLivesReq req) {
+    public BaseResponse getSellerLives(@BeanParam GetSellerLivesReq req) {
         GetSellerLivesResp resp = this.liveService.getSellerLives(req);
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setData(resp);
         return baseResponse;
     }
 
-
+    @Override
     @POST
     @Path("/{Activity:(?i:Activity)}/{ListInProgressActivitiesBySellerIds:(?i:ListInProgressActivitiesBySellerIds)}")
     public BaseResponse listInProgressActivitiesBySellerIds(ListInProgressActivitiesBySellerIdsReq req) {
