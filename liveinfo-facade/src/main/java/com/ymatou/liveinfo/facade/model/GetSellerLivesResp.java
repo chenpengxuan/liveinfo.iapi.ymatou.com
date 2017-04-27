@@ -3,6 +3,7 @@ package com.ymatou.liveinfo.facade.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ymatou.liveinfo.facade.common.PrintFriendliness;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,13 +27,13 @@ public class GetSellerLivesResp extends PrintFriendliness {
      * 即将进行的直播
      */
     @JsonProperty("UpcomingActivities")
-    private List<ActivityInfo> upcomingActivities;
+    private List<ActivityInfo> upcomingActivities = new ArrayList<>();
 
     /**
      * 已经结束的直播信息
      */
     @JsonProperty("HistoryActivities")
-    private List<ActivityInfo> historyActivities;
+    private List<ActivityInfo> historyActivities = new ArrayList<>();
 
 
 
