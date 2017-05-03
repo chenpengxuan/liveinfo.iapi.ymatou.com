@@ -19,7 +19,7 @@ public class ProductRepository extends MongoRepository {
     @Resource(name = "productMongoClient")
     private MongoClient mongoClient;
 
-    private final String dbName = "YmtProducts";
+    private static final String dbName = "YmtProducts";
 
     /**
      * 获取到MongoClient

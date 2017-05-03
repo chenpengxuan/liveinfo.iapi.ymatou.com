@@ -84,7 +84,7 @@ public class GetProductListByLiveIdTest extends BaseTest {
         // 验证按照品牌名称查询
         req = new GetProductListByLiveIdReq();
         req.setLiveId(live.getActivityId());
-        req.setSearchType(ProductInLiveSearchTypeEnum.BrandName.getCode());
+        req.setSearchType(String.valueOf(ProductInLiveSearchTypeEnum.BrandName.getCode()));
         req.setKeyword(liveProduct1.getBrandName());
 
         response = liveQueryFacade.getProductListByLiveId(req);
@@ -100,7 +100,7 @@ public class GetProductListByLiveIdTest extends BaseTest {
         // 验证按照品类名称查询
         req = new GetProductListByLiveIdReq();
         req.setLiveId(live.getActivityId());
-        req.setSearchType(ProductInLiveSearchTypeEnum.CategoryName.getCode());
+        req.setSearchType(ProductInLiveSearchTypeEnum.CategoryName.getMessage());
         req.setKeyword(liveProduct3.getThirdCategoryName());
 
         response = liveQueryFacade.getProductListByLiveId(req);
@@ -116,7 +116,7 @@ public class GetProductListByLiveIdTest extends BaseTest {
         // 验证按照品牌Id进行过滤
         req = new GetProductListByLiveIdReq();
         req.setLiveId(live.getActivityId());
-        req.setSearchType(ProductInLiveSearchTypeEnum.BrandIdAndCategoryId.getCode());
+        req.setSearchType(ProductInLiveSearchTypeEnum.BrandIdAndCategoryId.getMessage());
         req.setBrandIdList(liveProduct1.getBrandId() + "," + liveProduct4.getBrandId());
 
         response = liveQueryFacade.getProductListByLiveId(req);
@@ -133,7 +133,7 @@ public class GetProductListByLiveIdTest extends BaseTest {
         // 验证按照类别Id进行过滤
         req = new GetProductListByLiveIdReq();
         req.setLiveId(live.getActivityId());
-        req.setSearchType(ProductInLiveSearchTypeEnum.BrandIdAndCategoryId.getCode());
+        req.setSearchType(ProductInLiveSearchTypeEnum.BrandIdAndCategoryId.getMessage());
         req.setThirdCategoryIdList(liveProduct2.getThirdCategoryId() + "," + liveProduct3.getSecondCategoryId());
 
         response = liveQueryFacade.getProductListByLiveId(req);
@@ -151,7 +151,7 @@ public class GetProductListByLiveIdTest extends BaseTest {
         // 验证按照品牌和类别Id进行过滤
         req = new GetProductListByLiveIdReq();
         req.setLiveId(live.getActivityId());
-        req.setSearchType(ProductInLiveSearchTypeEnum.BrandIdAndCategoryId.getCode());
+        req.setSearchType(ProductInLiveSearchTypeEnum.BrandIdAndCategoryId.getMessage());
         req.setBrandIdList(String.valueOf(liveProduct3.getBrandId()));
         req.setThirdCategoryIdList(liveProduct2.getThirdCategoryId() + "," + liveProduct3.getSecondCategoryId());
 

@@ -25,7 +25,7 @@ public class LiveRepository extends MongoRepository {
     @Resource(name = "productMongoClient")
     private MongoClient mongoClient;
 
-    private final String dbName = "YmtProducts";
+    private static final String dbName = "YmtProducts";
 
     private final String[] liveFields = "lid,sid,confirm,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action"
             .split(",");
@@ -107,7 +107,6 @@ public class LiveRepository extends MongoRepository {
     public List<Live> getInProgressLivesByIds(List<Integer> liveIds){
         Datastore datastore = getDatastore(dbName);
         Query<Live> query = datastore.find(Live.class);
-        Date now = Calendar.getInstance().getTime();
         query.and(
                 query.criteria("lid").in(liveIds),
                 query.criteria("action").equal(LiveActionEnum.Available.getCode())
@@ -191,7 +190,6 @@ public class LiveRepository extends MongoRepository {
      * @return
      */
     public List<Live> getSellerHistoryLives(int sellerId, int limit){
-        List<Live> lives = new ArrayList<>();
         Datastore datastore = getDatastore(dbName);
         Query<Live> query = datastore.find(Live.class).disableValidation()
                 .retrievedFields(true, liveFields);

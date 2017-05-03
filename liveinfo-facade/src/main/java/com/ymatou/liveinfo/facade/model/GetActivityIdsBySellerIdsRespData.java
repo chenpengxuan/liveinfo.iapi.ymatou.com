@@ -24,7 +24,7 @@ public class GetActivityIdsBySellerIdsRespData extends PrintFriendliness {
         this.activityIds = activityIds;
     }
 
-    public static class SellerAcitvityId{
+    public static class SellerAcitvityId extends PrintFriendliness{
 
         @JsonProperty("SellerId")
         private int sellerId;

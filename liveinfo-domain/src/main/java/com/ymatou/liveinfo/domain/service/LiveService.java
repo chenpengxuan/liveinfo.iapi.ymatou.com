@@ -231,7 +231,7 @@ public class LiveService {
     public List<ActivityInfo> getSellerCurrentActivityList(List<Integer> sellerIdList){
         List<ActivityInfo> activityInfos = new ArrayList<>();
         List<Live> sellerCurrentLiveList = liveRepository.getSellerCurrentLiveList(sellerIdList);
-        if(sellerCurrentLiveList != null || sellerCurrentLiveList.size() > 0){
+        if(sellerCurrentLiveList != null && sellerCurrentLiveList.size() > 0){
             for (Live live: sellerCurrentLiveList) {
                 ActivityInfo activityInfo = new ActivityInfo();
                 try {
@@ -254,7 +254,7 @@ public class LiveService {
     public List<GetActivityIdsBySellerIdsRespData.SellerAcitvityId> getSellerCurrentActivityIdList(List<Integer> sellerIdList){
         List<GetActivityIdsBySellerIdsRespData.SellerAcitvityId> sellerAcitvityIds = new ArrayList<>();
         List<Live> sellerCurrentLiveList = liveRepository.getSellerCurrentLiveIdList(sellerIdList);
-        if(sellerCurrentLiveList != null || sellerCurrentLiveList.size() > 0){
+        if(sellerCurrentLiveList != null && sellerCurrentLiveList.size() > 0){
             for (Live live: sellerCurrentLiveList) {
                 GetActivityIdsBySellerIdsRespData.SellerAcitvityId sellerAcitvityId = new GetActivityIdsBySellerIdsRespData.SellerAcitvityId();
                 try {
@@ -278,7 +278,7 @@ public class LiveService {
     public List<ActivityComplexInfo> getInProgressActivitiesByIds(List<Integer> liveIds, int prodMaxNum){
         List<ActivityComplexInfo> activityInfos = new ArrayList<>();
         List<Live> liveList = liveRepository.getInProgressLivesByIds(liveIds);
-        if(liveList != null || liveList.size() > 0){
+        if(liveList != null && liveList.size() > 0){
             for (Live live: liveList) {
                 ActivityComplexInfo activityInfo = new ActivityComplexInfo();
                 try {
@@ -315,7 +315,13 @@ public class LiveService {
             return prodIds;
         }
 
-        ProductInLiveSearchTypeEnum searchTypeEnum = ProductInLiveSearchTypeEnum.getByCode(req.getSearchType());
+        ProductInLiveSearchTypeEnum searchTypeEnum;
+        if(StringUtils.isNotBlank(req.getSearchType()) && StringUtils.isNumeric(req.getSearchType())){
+            searchTypeEnum = ProductInLiveSearchTypeEnum.getByCode(Integer.parseInt(req.getSearchType()));
+        }else{
+            searchTypeEnum = ProductInLiveSearchTypeEnum.getByMessage(req.getSearchType());
+        }
+
         if(searchTypeEnum == null || ProductInLiveSearchTypeEnum.All.equals(searchTypeEnum)){
             return liveProducts.stream().map(liveProduct -> liveProduct.getProductId()).collect(Collectors.toList());
         }

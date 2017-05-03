@@ -14,7 +14,7 @@ public class GetProductListByLiveIdReq extends BaseRequest {
     private int liveId;
 
     @QueryParam("SearchType")
-    private int searchType;
+    private String searchType;
 
     @QueryParam("Keyword")
     private String keyword;
@@ -33,11 +33,11 @@ public class GetProductListByLiveIdReq extends BaseRequest {
         this.liveId = liveId;
     }
 
-    public int getSearchType() {
+    public String getSearchType() {
         return searchType;
     }
 
-    public void setSearchType(int searchType) {
+    public void setSearchType(String searchType) {
         this.searchType = searchType;
     }
 

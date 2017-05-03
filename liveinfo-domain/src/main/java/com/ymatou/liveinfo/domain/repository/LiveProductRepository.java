@@ -26,7 +26,7 @@ public class LiveProductRepository extends MongoRepository {
     @Resource(name = "productMongoClient")
     private MongoClient mongoClient;
 
-    private final String dbName = "YmtProducts";
+    private static final String dbName = "YmtProducts";
 
     private final String[] liveProductFields = "spid,brand,tcatname,bid,tcatid,scatid".split(",");
 

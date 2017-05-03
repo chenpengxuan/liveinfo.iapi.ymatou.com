@@ -7,13 +7,17 @@ package com.ymatou.liveinfo.facade.enums;
  */
 public enum ProductInLiveSearchTypeEnum {
 
-    All(0, "全部"),
+    // 全部
+    All(0, "All"),
 
-    BrandName(1, "按品牌名称查询"),
+    // 按品牌名称查询
+    BrandName(1, "BrandName"),
 
-    CategoryName(2, "按分类名称查询"),
+    // 按分类名称查询
+    CategoryName(2, "CategoryName"),
 
-    BrandIdAndCategoryId(3, "按品牌和分类编号查询");
+    // 按品牌和分类编号查询
+    BrandIdAndCategoryId(3, "BrandIdAndCategoryId");
 
     private int code;
 
@@ -43,6 +47,20 @@ public enum ProductInLiveSearchTypeEnum {
         for (ProductInLiveSearchTypeEnum verifyCodeEnum : ProductInLiveSearchTypeEnum.values()) {
             if (verifyCodeEnum.getCode() == code) {
                 return verifyCodeEnum;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 通过Message获取枚举
+     * @param msg
+     * @return
+     */
+    public static ProductInLiveSearchTypeEnum getByMessage(String msg) {
+        for (ProductInLiveSearchTypeEnum enumItem : ProductInLiveSearchTypeEnum.values()) {
+            if (enumItem.getMessage().equalsIgnoreCase(msg)) {
+                return enumItem;
             }
         }
         return null;
