@@ -36,7 +36,7 @@ public class SystemFacadeImpl implements  SystemFacade{
                 + "\"1.0.1\":\"2017-04-13.01 first deploy.\","
                 + "\"1.0.2\":\"2017-04-21.01 add other api.\","
                 + "\"1.0.3\":\"2017-04-27.01 fix api 5 beanparam.\","
-                + "\"1.0.4\":\"2017-05-03.01 fix GetProductListByLiveId api SearchType Enum.\""
+                + "\"1.0.4\":\"2017-05-05.01 fix GetProductListByLiveId api SearchType Enum.\""
                 + "}";
     }
 

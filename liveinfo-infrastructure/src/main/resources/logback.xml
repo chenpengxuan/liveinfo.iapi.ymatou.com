@@ -4,7 +4,7 @@
 	<property name="pattern"
 		value="%date [%thread] %-5level %logger{40} KEY[%X{logPrefix}] - %msg%n" />
 	<property name="baseDir" value="/usr/local/log/${appId}" />
-	<property name="level" value="debug" />
+	<property name="level" value="DEBUG" />
 	<property name="charset" value="UTF-8" />
 	<property name="immediateFlush" value="true" />
 	<property name="queueSize" value="1024" />

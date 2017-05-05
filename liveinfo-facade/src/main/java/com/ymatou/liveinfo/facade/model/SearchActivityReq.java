@@ -1,6 +1,8 @@
 package com.ymatou.liveinfo.facade.model;
 
+import com.ymatou.library.datetimeparse.DateTimeParse;
 import com.ymatou.liveinfo.facade.common.BaseRequest;
+import com.ymatou.liveinfo.facade.enums.ActivityStateEnum;
 
 import javax.ws.rs.QueryParam;
 import java.util.Date;
@@ -46,13 +48,13 @@ public class SearchActivityReq  extends BaseRequest{
      * 创建直播开始时间
      */
     @QueryParam("AddTimeBegin")
-    private Date addTimeBegin;
+    private String addTimeBegin;
 
     /**
      * 创建直播结束时间
      */
     @QueryParam("AddTimeEnd")
-    private Date addTimeEnd;
+    private String addTimeEnd;
 
     /**
      * 大州Id
@@ -75,13 +77,13 @@ public class SearchActivityReq  extends BaseRequest{
      * 直播开始时间
      */
     @QueryParam("StartTime")
-    private Date startTime;
+    private String startTime;
 
     /**
      * 直播结束时间
      */
     @QueryParam("EndTime")
-    private Date endTime;
+    private String endTime;
 
     /**
      * 买手Id
@@ -193,18 +195,18 @@ public class SearchActivityReq  extends BaseRequest{
     }
 
     public Date getAddTimeBegin() {
-        return addTimeBegin;
+        return DateTimeParse.tryParse(addTimeBegin);
     }
 
-    public void setAddTimeBegin(Date addTimeBegin) {
+    public void setAddTimeBegin(String addTimeBegin) {
         this.addTimeBegin = addTimeBegin;
     }
 
     public Date getAddTimeEnd() {
-        return addTimeEnd;
+        return DateTimeParse.tryParse(addTimeEnd);
     }
 
-    public void setAddTimeEnd(Date addTimeEnd) {
+    public void setAddTimeEnd(String addTimeEnd) {
         this.addTimeEnd = addTimeEnd;
     }
 
@@ -233,18 +235,18 @@ public class SearchActivityReq  extends BaseRequest{
     }
 
     public Date getStartTime() {
-        return startTime;
+        return DateTimeParse.tryParse(startTime);
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
     public Date getEndTime() {
-        return endTime;
+        return DateTimeParse.tryParse(endTime);
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -321,7 +323,7 @@ public class SearchActivityReq  extends BaseRequest{
     }
 
     public int getActivityState() {
-        return activityState;
+        return this.activityState;
     }
 
     public void setActivityState(int activityState) {

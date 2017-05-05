@@ -1,5 +1,7 @@
 package com.ymatou.liveinfo.facade.enums;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by wangxudong on 2017/4/6.
  */
@@ -42,6 +44,27 @@ public enum ActivityStateEnum {
             if (verifyCodeEnum.getCode() == code) {
                 return verifyCodeEnum;
             }
+        }
+        return null;
+    }
+
+    public static ActivityStateEnum parseFrom(String activityState){
+        if(StringUtils.isBlank(activityState)){
+            return null;
+        }
+        if(StringUtils.isNumeric(activityState)){
+            return getByCode(Integer.parseInt(activityState));
+        }
+
+        switch (activityState){
+            case "NotEffected":
+                return ActivityStateEnum.NotEffected;
+            case "InProcess":
+                return ActivityStateEnum.InProcess;
+            case "NotStart":
+                return ActivityStateEnum.NotStart;
+            case "End":
+                return ActivityStateEnum.End;
         }
         return null;
     }

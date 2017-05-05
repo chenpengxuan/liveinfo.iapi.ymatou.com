@@ -12,6 +12,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by gejianhua on 2017/4/17.
  */
@@ -21,6 +23,8 @@ public class SearchActivityTest extends BaseTest {
     private LiveQueryFacade liveQueryFacade;
 
     private SearchActivityReq buildReqOfAllCondition(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         SearchActivityReq req = new SearchActivityReq();
         req.setCountryId(1);
         req.setPageSize(20);
@@ -30,11 +34,11 @@ public class SearchActivityTest extends BaseTest {
         req.setActivityContent("1");
         req.setActivityName("test-activityname");
         req.setActivityState(ActivityStateEnum.InProcess.getCode());
-        req.setAddTimeBegin(DateTime.now().plusDays(-1).toDate());
-        req.setAddTimeEnd(DateTime.now().plusDays(10).toDate());
+        req.setAddTimeBegin(simpleDateFormat.format(DateTime.now().plusDays(-1).toDate()));
+        req.setAddTimeEnd(simpleDateFormat.format(DateTime.now().plusDays(10).toDate()));
         req.setAreaId(1);
         req.setChannel(true);
-        req.setEndTime(DateTime.now().plusDays(10).toDate());
+        req.setEndTime(simpleDateFormat.format(DateTime.now().plusDays(10).toDate()));
         req.setExceptSellerIds(Lists.newArrayList(1, 2));
         req.setIsInActivity(1);
         req.setIsLive(1);
@@ -43,7 +47,7 @@ public class SearchActivityTest extends BaseTest {
         req.setSellerName("test-sellername");
         req.setSortField("dendtime");
         req.setSortType("desc");
-        req.setStartTime(DateTime.now().plusDays(-1).toDate());
+        req.setStartTime(simpleDateFormat.format(DateTime.now().plusDays(-1).toDate()));
 
         return req;
     }
@@ -91,9 +95,10 @@ public class SearchActivityTest extends BaseTest {
 
     @Test
     public void testSearchActivityByTime(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SearchActivityReq req = this.buildReqOfNoneCondition();
-        req.setAddTimeBegin(DateTime.now().plusDays(-100).toDate());
-        req.setAddTimeEnd(DateTime.now().plusDays(100).toDate());
+        req.setAddTimeBegin(simpleDateFormat.format(DateTime.now().plusDays(-100).toDate()));
+        req.setAddTimeEnd(simpleDateFormat.format(DateTime.now().plusDays(100).toDate()));
 
         BaseResponse baseResponse = this.liveQueryFacade.searchActivity(req);
 

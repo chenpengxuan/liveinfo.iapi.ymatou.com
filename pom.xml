@@ -79,6 +79,8 @@
 		<mapdb.version>3.0.1</mapdb.version>
 		<google.guava.version>19.0</google.guava.version>
 
+		<datetime-parse.version>1.0.2</datetime-parse.version>
+
 		<!-- self version -->
 		<liveinfo.version>1.0.0</liveinfo.version>
 
@@ -430,6 +432,12 @@
 				<groupId>org.mapdb</groupId>
 				<artifactId>mapdb</artifactId>
 				<version>${mapdb.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.ymatou.library</groupId>
+				<artifactId>datetime-parse</artifactId>
+				<version>${datetime-parse.version}</version>
 			</dependency>
 
 			<!-- self -->
