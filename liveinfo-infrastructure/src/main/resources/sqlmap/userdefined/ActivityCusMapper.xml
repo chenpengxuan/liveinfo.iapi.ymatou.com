@@ -125,6 +125,9 @@
     <if test="sellerId != null and sellerId > 0">
       and iSellerId = #{sellerId, jdbcType=INTEGER}
     </if>
+    <if test="countryId > -1">
+      and iCountryId = #{countryId, jdbcType=INTEGER}
+    </if>
     <if test="countryIds != null and countryIds.size() > 0">
       and iCountryId IN
       <foreach item="item" index="index" collection="countryIds" open="(" separator="," close=")">
