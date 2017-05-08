@@ -56,6 +56,12 @@ public class ActivityInfoForBack extends ActivityInfo {
     @JsonProperty("Latlng")
     private String latlng;
 
+    /**
+     * 买手名称
+     */
+    @JsonProperty("Seller")
+    private String seller;
+
 
     public Integer getCountryId() {
         return countryId;
@@ -119,6 +125,14 @@ public class ActivityInfoForBack extends ActivityInfo {
 
     public void setLatlng(String latlng) {
         this.latlng = latlng;
+    }
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public void setSeller(String seller) {
+        this.seller = seller;
     }
 }
 

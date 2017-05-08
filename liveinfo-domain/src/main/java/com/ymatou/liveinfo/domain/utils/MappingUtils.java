@@ -85,6 +85,7 @@ public class MappingUtils {
         activityInfo.setDeliverType(Optional.ofNullable(activityPo.getDeliveryType()).orElse(0));
         activityInfo.setSort(Optional.ofNullable(activityPo.getSort()).orElse(0));
         activityInfo.setLatlng(activityPo.getLatlng());
+        activityInfo.setSeller(activityPo.getSellerName());
 
         return activityInfo;
     }
