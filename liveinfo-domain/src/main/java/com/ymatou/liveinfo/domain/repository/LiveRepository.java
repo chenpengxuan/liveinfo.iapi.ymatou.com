@@ -27,7 +27,7 @@ public class LiveRepository extends MongoRepository {
 
     private static final String dbName = "YmtProducts";
 
-    private final String[] liveFields = "lid,sid,confirm,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action"
+    private final String[] liveFields = "lid,sid,confirm,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action,cover"
             .split(",");
 
     private final FindOptions limitOne = new FindOptions().limit(1);

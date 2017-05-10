@@ -67,6 +67,7 @@ public class BaseTest {
         live.setTitle("Live-Title-" + random);
         live.setVideoCover("Live-VideoCover-" + random);
         live.setVideoUrl("Live-VideoUrl-" + random);
+        live.setLiveCover("Live-Cover-" + random);
 
         return live;
     }
@@ -156,6 +157,7 @@ public class BaseTest {
         assertEquals(live.getStartTime(), activityInfo.getStartTime());
         assertEquals(live.getActivityContent(), activityInfo.getActivityContent());
         assertEquals(live.getActivityContent(), activityInfo.getActivityInfo());
+        assertEquals(live.getLiveCover(), activityInfo.getLiveCover());
     }
 
     /**

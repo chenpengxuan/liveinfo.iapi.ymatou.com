@@ -128,6 +128,12 @@ public class ActivityInfo extends PrintFriendliness {
     private List<String> brands = new ArrayList<>();
 
     /**
+     * 直播封面
+     */
+    @JsonProperty("LiveCover")
+    private String liveCover;
+
+    /**
      * 计算直播状态枚举
      * @return
      */
@@ -310,5 +316,13 @@ public class ActivityInfo extends PrintFriendliness {
 
     public void setBrands(List<String> brands) {
         this.brands = brands;
+    }
+
+    public String getLiveCover() {
+        return liveCover;
+    }
+
+    public void setLiveCover(String liveCover) {
+        this.liveCover = liveCover;
     }
 }

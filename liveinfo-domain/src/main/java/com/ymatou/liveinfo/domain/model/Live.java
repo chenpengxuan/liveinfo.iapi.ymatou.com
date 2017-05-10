@@ -123,6 +123,12 @@ public class Live extends PrintFriendliness
     @Property("latlng")
     private String latLng;
 
+    /**
+     * 直播封面 精品直播新增字段
+     */
+    @Property("cover")
+    private String liveCover;
+
     public ObjectId getId() {
         return id;
     }
@@ -265,5 +271,13 @@ public class Live extends PrintFriendliness
 
     public void setLatLng(String latLng) {
         this.latLng = latLng;
+    }
+
+    public String getLiveCover() {
+        return liveCover;
+    }
+
+    public void setLiveCover(String liveCover) {
+        this.liveCover = liveCover;
     }
 }
