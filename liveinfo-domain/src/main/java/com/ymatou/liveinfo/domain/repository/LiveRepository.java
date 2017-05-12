@@ -8,6 +8,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.Sort;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by wangxudong on 2017/4/1.
  */
 @Component
-public class LiveRepository extends MongoRepository {
+public class LiveRepository extends MongoRepository implements InitializingBean {
 
     @Resource(name = "productMongoClient")
     private MongoClient mongoClient;
@@ -29,6 +30,8 @@ public class LiveRepository extends MongoRepository {
 
     private final String[] liveFields = "lid,sid,confirm,flag,title,vcover,vurl,name,pic,add,country,end,addr,start,content,action,cover"
             .split(",");
+
+    private Query<Live> liveBrefQuery = null;
 
     private final FindOptions limitOne = new FindOptions().limit(1);
 
@@ -105,13 +108,13 @@ public class LiveRepository extends MongoRepository {
      * @return
      */
     public List<Live> getInProgressLivesByIds(List<Integer> liveIds){
-        Datastore datastore = getDatastore(dbName);
-        Query<Live> query = datastore.find(Live.class);
+        Query<Live> query = liveBrefQuery.cloneQuery();
         query.and(
                 query.criteria("lid").in(liveIds),
                 query.criteria("action").equal(LiveActionEnum.Available.getCode())
         );
-        return query.retrievedFields(true, liveFields).disableValidation().asList();
+
+        return query.asList();
     }
 
     /**
@@ -203,6 +206,38 @@ public class LiveRepository extends MongoRepository {
                 .asList();
     }
 
+    /**
+     * Invoked by a BeanFactory after it has set all bean properties supplied
+     * (and satisfied BeanFactoryAware and ApplicationContextAware).
+     * <p>This method allows the bean instance to perform initialization only
+     * possible when all bean properties have been set and to throw an
+     * exception in the event of misconfiguration.
+     *
+     * @throws Exception in the event of misconfiguration (such
+     *                   as failure to set an essential property) or if initialization fails.
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Datastore datastore = getDatastore(dbName);
+        liveBrefQuery = datastore.find(Live.class);
+        liveBrefQuery.project("lid", true)
+                .project("sid", true)
+                .project("confirm", true)
+                .project("flag", true)
+                .project("title", true)
+                .project("vcover", true)
+                .project("vurl", true)
+                .project("name", true)
+                .project("pic", true)
+                .project("add", true)
+                .project("country", true)
+                .project("end", true)
+                .project("addr", true)
+                .project("start", true)
+                .project("content", true)
+                .project("action", true)
+                .project("cover", true).disableValidation();
+    }
 }
 
 
