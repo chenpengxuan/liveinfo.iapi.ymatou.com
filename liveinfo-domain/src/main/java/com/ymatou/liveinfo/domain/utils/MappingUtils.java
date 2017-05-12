@@ -24,7 +24,9 @@ public class MappingUtils {
         }
         ActivityInfo activityInfo = new ActivityInfo();
         try {
-            BeanUtils.copyProperties(activityInfo, live);
+
+            EntityUtils.toActivity(activityInfo, live);
+            //BeanUtils.copyProperties(activityInfo, live);
         } catch (Exception e) {
             throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
         }
@@ -38,7 +40,9 @@ public class MappingUtils {
         }
         ActivityComplexInfo activityComplexInfo = new ActivityComplexInfo();
         try {
-            BeanUtils.copyProperties(activityComplexInfo, live);
+
+            EntityUtils.toActivity(activityComplexInfo, live);
+            //BeanUtils.copyProperties(activityComplexInfo, live);
         } catch (Exception e) {
             throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
         }

@@ -111,7 +111,8 @@ public class LiveService {
 
         GetActivityInfoResp resp = new GetActivityInfoResp();
         try {
-            BeanUtils.copyProperties(resp, live);
+            EntityUtils.toActivity(resp, live);
+            //BeanUtils.copyProperties(resp, live);
         } catch (Exception e) {
             throw new BizException("getActivityInfo BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
         }
@@ -284,7 +285,7 @@ public class LiveService {
                 ActivityComplexInfo activityInfo = new ActivityComplexInfo();
                 try {
                     // BeanUtils.copyProperties(activityInfo, live);
-                    EntityUtils.toActivityComplexInfo(activityInfo, live);
+                    EntityUtils.toActivity(activityInfo, live);
                     activityInfos.add(activityInfo);
                 } catch (Exception e) {
                     throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);

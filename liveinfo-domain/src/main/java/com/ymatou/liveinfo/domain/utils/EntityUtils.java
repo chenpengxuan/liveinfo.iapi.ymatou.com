@@ -2,6 +2,7 @@ package com.ymatou.liveinfo.domain.utils;
 
 import com.ymatou.liveinfo.domain.model.Live;
 import com.ymatou.liveinfo.facade.model.ActivityComplexInfo;
+import com.ymatou.liveinfo.facade.model.ActivityInfo;
 
 /**
  * Created by wangxudong on 2017/5/12.
@@ -13,7 +14,7 @@ public class EntityUtils {
      * @param to
      * @param from
      */
-    public static void toActivityComplexInfo(ActivityComplexInfo to, Live from){
+    public static void toActivity(ActivityInfo to, Live from){
         to.setActivityId(from.getActivityId());
         to.setTitle(from.getTitle());
         to.setVideoCover(from.getVideoCover());
