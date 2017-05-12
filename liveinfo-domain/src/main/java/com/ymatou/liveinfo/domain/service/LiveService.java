@@ -14,6 +14,7 @@ import com.ymatou.liveinfo.domain.repository.LiveRepository;
 import com.ymatou.liveinfo.domain.repository.ProductRepository;
 import com.ymatou.liveinfo.domain.repository.sqlserver.CountrySqlRepository;
 import com.ymatou.liveinfo.domain.repository.sqlserver.LiveSqlRepository;
+import com.ymatou.liveinfo.domain.utils.EntityUtils;
 import com.ymatou.liveinfo.domain.utils.MappingUtils;
 import com.ymatou.liveinfo.facade.common.BizException;
 
@@ -282,7 +283,8 @@ public class LiveService {
             for (Live live: liveList) {
                 ActivityComplexInfo activityInfo = new ActivityComplexInfo();
                 try {
-                    BeanUtils.copyProperties(activityInfo, live);
+                    // BeanUtils.copyProperties(activityInfo, live);
+                    EntityUtils.toActivityComplexInfo(activityInfo, live);
                     activityInfos.add(activityInfo);
                 } catch (Exception e) {
                     throw new BizException("BeanUtils copyProperties Fail,with liveId:" + live.getActivityId(), e);
